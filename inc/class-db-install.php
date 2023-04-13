@@ -135,7 +135,7 @@ if (!class_exists('ATL_DB')) {
         {
             global $wpdb;
             if (!$this->is_installed() || version_compare(get_option('atl_db_version'), '1.0.0', '<')) {
-                $sql = "CREATE TABLE {$this->_table_users} (
+                $sql = "CREATE TABLE {$this->_table_admin_message} (
          id int   NOT NULL  AUTO_INCREMENT,
          creator_id mediumint(9) NOT NULL ,
          time_create datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
@@ -143,7 +143,6 @@ if (!class_exists('ATL_DB')) {
          title  varchar(40) DEFAULT '' NOT NULL,
          description  text DEFAULT '' NOT NULL,
           PRIMARY KEY (id)
-		  UNIQUE KEY id (id)
 				)DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ; ";
                 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
                 dbDelta($sql);
@@ -154,7 +153,7 @@ if (!class_exists('ATL_DB')) {
         {
             global $wpdb;
             if (!$this->is_installed() || version_compare(get_option('atl_db_version'), '1.0.0', '<')) {
-                $sql = "CREATE TABLE {$this->_table_device_info} (
+                $sql = "CREATE TABLE {$this->_table_admin_users_message} (
 		   user_id mediumint(9) NOT NULL ,
         msg_id mediumint(9) NOT NULL ,
         status mediumint(9) NOT NULL

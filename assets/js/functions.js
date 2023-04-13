@@ -1,77 +1,4 @@
 jQuery(document).ready(function ($) {
-//     var user_sb, filter_sb, nameTable_sb, numPage, allPage;
-//     // set filter sub menu
-//     $("#setFilter").on('click', function () {
-//         setFilter();
-//         getMsgTable()
-//     });
-//     function setFilter () {
-//         user_sb = $('#searchByuser').find(":selected").val();
-//         filter_sb = $('#filter').find(":selected").val();
-//         nameTable_sb = $('#filter').find(":selected").data('table');
-//         numPage = 1;
-//         allPage = 1;
-//         getMsgTable()
-//     }
-// // get message sub menu ajax
-//     function getMsgTable(pageBtn) {
-//         if (numPage < allPage || numPage === allPage) {
-//             if (pageBtn === 'previous') {
-//                 numPage = numPage - 1;
-//                 $('#next_btn').css('display', 'inline-block');
-//                 if (numPage === 1) {
-//                     $('#previous_btn').css('display', 'none');
-//                 }
-//             }
-//             if (pageBtn === 'next') {
-//                 numPage = numPage + 1;
-//                 $('#previous_btn').css('display', 'inline-block');
-//             }
-//             if (numPage === allPage) {
-//                 $('#next_btn').css('display', 'none');
-//             }
-//             if (numPage === 1) {
-//                 $('#previous_btn').css('display', 'none');
-//             }
-//             jQuery.ajax({
-//                 type: 'POST',
-//                 data: {
-//                     action: 'table',
-//                     security: ajax_var.nonce,
-//                     filter: filter_sb,
-//                     id: user_sb,
-//                     table: nameTable_sb,
-//                     page: numPage
-//                 },
-//                 url: ajaxurl,
-//                 success: function (data) {
-//                     allPage = data[1];
-//                     var dataMsg = data[0];
-//                     if (numPage < allPage) {
-//                         $('#next_btn').css('display', 'inline-block');
-//                     }
-//                     var table = document.getElementById("tableBox");
-//                     $("#tableBox").empty();
-//                     dataMsg.forEach(function (msg) {
-//                         var row = table.insertRow(0);
-//                         row.setAttribute("data-table-msg", JSON.stringify(msg));
-//                         row.setAttribute("class", "pointer openModal msgTable");
-//                         row.setAttribute("data-btn", "modal-for-table");
-//
-//                         var cell1 = row.insertCell(0);
-//                         var cell2 = row.insertCell(1);
-//                         var cell3 = row.insertCell(2);
-//                         var cell4 = row.insertCell(3);
-//                         cell1.innerHTML = msg.sender_name;
-//                         cell2.innerHTML = msg.receiver_name;
-//                         cell3.innerHTML = msg.title;
-//                         cell4.innerHTML = ago(new Date(msg.time_create));
-//                     });
-//                 }
-//             });
-//         }
-//
-//     }
 
 // show message sob menu
     $("#tableBox").on('click', '.msgTable',function () {
@@ -87,10 +14,10 @@ jQuery(document).ready(function ($) {
 // save message ajax
 
     $("#saveMsg").on('click', function () {
-        var user_id = $('#value-hide').val();
-        var title = $('#input-title').val().trim();
+        var user_id = $('#msg_users').val();
+        var title = $('#input-title').val();
         var description = $('#description-area').val();
-
+        console.log(user_id,title)
         if (title === '' || user_id === '') {
             alert('پر کردن عنوان و انتخاب کاربر ضروری است!')
         } else {
@@ -157,16 +84,7 @@ jQuery(document).ready(function ($) {
         }
     });
 
-//open modals
-    $(".have-modal").on('click', '.openModal',function () {
-        $(".wf-modal").removeClass("opened");
-        $("#" + $(this).data('btn')).addClass('opened');
-    });
 
-// close modals
-    $(".closeModal").on('click', function () {
-        $(".wf-modal").removeClass("opened");
-    });
 
 // add data in show message fields
     $("#show-message").on('click', function () {
@@ -189,7 +107,36 @@ jQuery(document).ready(function ($) {
             'data-for-status': 2
         });
     })
+    $(document).ready(function() {
+        var modal = document.querySelector(".modal");
+        var triggers = document.querySelectorAll(".openModal");
+        var closeButton = document.querySelector(".close-button");
 
+        function toggleModal() {
+            modal.classList.toggle("show-modal");
+        }
+
+        function windowOnClick(event) {
+            if (event.target === modal) {
+                toggleModal();
+            }
+        }
+
+        for (var i = 0, len = triggers.length; i < len; i++) {
+            triggers[i].addEventListener("click", toggleModal);
+        }
+        closeButton.addEventListener("click", toggleModal);
+        window.addEventListener("click", windowOnClick);
+
+        $('.atl-select').each(function () {
+            $(this).select2({
+                theme: 'bootstrap4',
+                width: 'style',
+                placeholder: $(this).attr('placeholder'),
+                allowClear: Boolean($(this).data('allow-clear')),
+            });
+        });
+    });
     function ago(val) {
         val = 0 | (Date.now() - val) / 1000;
         var unit, length = {

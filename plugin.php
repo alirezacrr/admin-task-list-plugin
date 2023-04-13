@@ -35,6 +35,7 @@ $db_version = '1.0.0';
  */
 define('ATL_VERSION', $plugin_version);
 define('ATL_DB_VERSION', $plugin_version);
+define('ATL_ABSPATH', dirname(ATL_FILE) . '/');
 
 if (!class_exists('ATL', false)) {
     include_once dirname(ATL_FILE) . '/inc/admin-task-list.php';
@@ -238,449 +239,85 @@ function my_plugin_function()
 
 }
 
+
 // Get messages for sub menu
-
-function getMsgTable()
-{
-    if ( ! check_ajax_referer( 'ajax-nonce', 'security' ) ) {
-        wp_send_json_error( 'Invalid security token sent.' );
-        wp_die();
-    }
-
-    global $wpdb;
-    // table name
-    $admin_users_message= $wpdb->prefix. "admin_users_message";
-    $admin_message=$wpdb->prefix . "admin_message";
-    $users=$wpdb->prefix . "users";
-    //
-    $userID = $_POST['id'];
-    $table = "wp_admin_" . $_POST['table'];
-    $limit = 10;
-    $page = $_POST['page'];
-    $offset = ($page - 1) * $limit;
-    $_where = "$admin_users_message.status
-     = 0 or $admin_users_message.status =2 ";
-    if ($_POST['filter'] != '') {
-        if ($_POST['filter'] === "all") {
-            $_where = $_where . "or $admin_users_message.status =1 ";
-        } else {
-            $rule = $table . "." . $_POST['filter'] . "=" . $userID;
-            $_where = $rule . " " . "and" . " " . $_where;
-        }
-
-    }
-
-    $querystr = "SELECT tb1.* , $users.user_nicename as sender_name , $users.user_email  FROM (SELECT $admin_users_message.* ,
-    $admin_message.* , $users.user_nicename as 
-    receiver_name FROM $admin_users_message LEFT JOIN $users ON $users.ID = $admin_users_message.user_id
-    LEFT JOIN $admin_message ON $admin_users_message.msg_id = $admin_message.id WHERE " . $_where . ")
-     as tb1 LEFT JOIN $users on tb1.creator_id = $users.ID LIMIT $offset , $limit";
-    $data = $wpdb->get_results($querystr);
-
-    $total = $wpdb->get_var("select count(*) as total from $admin_users_message LEFT JOIN $admin_message ON 
-    $admin_users_message.msg_id = $admin_message.id  WHERE $_where");
-
-    $num_of_pages = ceil($total / $limit);
-    wp_send_json(array($data, $num_of_pages));
-}
-
-add_action('wp_ajax_table', 'getMsgTable');
-
-// Create modals for messages
-
-function modals()
-{
-    global $wpdb;
-    // table name
-    $admin_users_message= $wpdb->prefix. "admin_users_message";
-    $admin_message=$wpdb->prefix . "admin_message";
-    $users=$wpdb->prefix . "users";
-    //
-    $current_user = wp_get_current_user();
-    $chack_msg = $wpdb->get_var("SELECT user_id FROM $admin_users_message WHERE user_id = $current_user->ID
-    and status = 0 or status =2");
-    ?>
-    <div class="have-modal">
-    <?php if ($chack_msg) { ?>
-    <a class="pointer topbutton openModal" aria-role="button"  data-btn="modal-messages">
-        <img class="btn_sticky" src="<?php echo plugin_dir_url(__FILE__) . 'icons/haveMsg.png'; ?>">
-    </a>
-<?php } else { ?>
-    <a class="pointer topbutton openModal" aria-role="button"  data-btn="modal-new">
-        <img class="btn_sticky" src="<?php echo plugin_dir_url(__FILE__) . 'icons/noMsg.png'; ?>">
-    </a>
-<?php } ?>
-    </div>
-    <!--  modal new message  -->
-
-    <section class="wrp">
-        <div class="wf-modal" aria-hidden="true" id="modal-new">
-            <article class="wf-dialog-modal">
-                <div class="content-dialog">
-                    <span class="close"><a class="pointer exit closeModal"
-                                           aria-hidden="true">بستن</a></span>
-                    <span class="close"><a class="pointer openModal" data-btn="modal-new"
-                                           aria-hidden="true">جدید</a></span>
-                    <header class="wf-header-modal">
-                        <div class="row-head box-title-write">
-                            <span class="txt-label">عنوان</span>
-                            <div class="box-design input-title-div">
-                                <input type="text" id="input-title" maxlength="40">
-                            </div>
-                        </div>
-
-                        <div class="row-head box-user-select">
-
-                            <span class="txt-label">کاربر</span>
-
-                            <div class="box-design dropdown" id="dropdown_admin">
-                                <img class="icon-arrow-down"
-                                     src="<?php echo plugin_dir_url(__FILE__) . 'icons/arrow-down-sign-to-navigate.svg'; ?>"
-                                     alt="">
-                                <button class="dropbtn" id="dropbtn"></button>
-                                <input type="hidden" name="id" value="" id="value-hide">
-                                <div id="myDropdown" class="dropdown-content">
-                                    <?php
-
-                                    $args = array(
-                                        'role' => 'Administrator'
-                                    );
-                                    $users_admin = get_users($args);
-
-                                    ?>
-                                    <ul>
-                                        <li id="0">همه ی کاربران</li>
-                                        <?php foreach ($users_admin as $user) : ?>
-                                            <li id="<?php echo esc_html($user->ID) ?>">
-                                                <?php echo esc_html($user->display_name) ?></li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                    </header>
-                    <div class="more-description">
-                        <span class="des-txt">توضیحات بیشتر</span>
-                        <textarea name="" id="description-area" class=" box-design" cols="30" rows="10"></textarea>
-                    </div>
-                    <footer class="wf-footer-modal">
-                        <button class="btn_status btn_submit" id="saveMsg"
-                                aria-hidden="true" >
-                            ذخیره و
-                            ارسال
-                        </button>
-                    </footer>
-                </div>
-            </article>
-        </div>
-    </section>
-
-    <!--  modal show all messages  -->
-<div class="have-modal">
-    <section class="wrp"  >
-        <?php $querystr = "SELECT tb1.* , $users.user_nicename as sender_name , $users.user_email  FROM (SELECT $admin_users_message.* , $admin_message.* , $users.user_nicename as 
-    receiver_name FROM $admin_users_message LEFT JOIN $users ON $users.ID = $admin_users_message.user_id
-    LEFT JOIN $admin_message ON $admin_users_message.msg_id = $admin_message.id WHERE  $admin_users_message.user_id = $current_user->ID and $admin_users_message.status
-     = 0 or $admin_users_message.status =2)
-     as tb1 LEFT JOIN $users on tb1.creator_id = $users.ID  ";
-        $data = $wpdb->get_results($querystr); ?>
-        <div class="wf-modal" aria-hidden="true" id="modal-messages">
-            <article class="wf-dialog-modal">
-                <div class="content-dialog content-msg">
-                    <?php $count = 0;
-                    foreach ($data as $value) {
-                        if ($value->status === '0') {
-                            $count += 1;
-                        }
-                    } ?>
-                    <div class="warp-msg">
-                        <span class="close">
-                            <a class="pointer exit closeModal"
-                               aria-hidden="true">بستن</a></span>
-                        <span class="close">
-                            <a class="pointer openModal" data-btn="modal-new"
-                               aria-hidden="true">جدید</a>
-                        </span>
-                        <div>
-                            <span id="count-msg"><?php echo $count ?></span>
-                        </div>
-                        <div>
-                            <?php
-                            foreach ($data as $msg) {?>
-                                <div class="row-msg" id="msg-id-<?php echo $msg->msg_id ?>">
-                                    <div class="info-msg">
-                                        <div class="avatar-msg">
-                                            <img src="https://www.gravatar.com/avatar/<?php
-                                            wp_generate_password($msg->creator_id, false ); ?>">
-                                        </div>
-                                        <div class="header-msg">
-                                            <div class="name-msg">
-                                                <?php
-                                                echo $msg->sender_name;
-                                                ?>
-
-                                            </div>
-                                            <div class="title-msg title-all-msg ">
-                                                <a id="show-message" class="openModal pointer"
-                                                   data-btn="modal-show-message"
-                                                   data-msg-detailed="<?php echo htmlspecialchars(json_encode($msg),
-                                                       ENT_QUOTES, 'UTF-8') ?>"> <?php
-                                                    echo $msg->title;
-                                                    ?>
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="description-msg"><?php echo $msg->description; ?></div>
-                                    <div class="time_btn_msg">
-                                        <?php echo time_elapsed_string($msg->time_create); ?>
-                                        <button class="btn_status btn_submit changeStatus"
-                                                data-user-id="<?php echo $current_user->id ?>"
-                                                data-msg-id="<?php echo $msg->msg_id ?>" data-for-status="1"
-                                                aria-hidden="true" href="#">انجام شد
-                                        </button>
-                                    </div>
-                                </div>
-
-                            <?php } ?>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        </div>
-    </section>
-</div>
-    <!--  modal show  message  -->
-
-    <section class="wrp">
-        <div class="wf-modal" aria-hidden="true" id="modal-show-message">
-            <article class="wf-dialog-modal">
-                <div class="content-dialog content-msg">
-
-                    <div class="warp-msg">
-                        <span class="close"><a class="pointer exit closeModal"
-                                               aria-hidden="true">بستن</a></span>
-                        <span class="close"><a class="pointer openModal" data-btn="modal-new"
-                                               aria-hidden="true">جدید</a></span>
-
-                        <header class="header-show-msg">
-                            <div class="row-msg">
-                                <div class="info-msg">
-                                    <input type="hidden" name="user_id" id="user_id" value=""/>
-                                    <div class="avatar-msg" id="avatar-msg">
-
-                                    </div>
-                                    <div class="header-msg">
-                                        <div class="name-msg" id="name-msg">
-
-                                        </div>
-                                        <div class="title-msg">
-                                            <a
-                                                    id="title-msg">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="time_btn_msg tbm">
-                                    <span id="time-msg">
-                                    </span>
-                                    <button class="btn_status btn_check changeStatus"
-                                            id="btn_check"
-                                    >نیاز به بررسی
-                                    </button>
-                                    <button class="btn_status btn_submit changeStatus"
-                                            id="btn_submit"
-                                            >انجام شد
-                                    </button>
-                                </div>
-                            </div>
-
-                        </header>
-                        <div class="content-show-msg">
-                            <div class="description-msg description-show-msg">
-                                <p id="description-msg"></p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-        </div>
-        </article>
-        </div>
-    </section>
-    <script type="text/javascript">
-        var ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
-    </script>
-    <?php
-}
-
-add_action('admin_footer', 'modals');
-
-// save message in database.
-
-function save_msg()
-{
-    if ( ! check_ajax_referer( 'ajax-nonce', 'security' ) ) {
-        wp_send_json_error( 'Invalid security token sent.' );
-        wp_die();
-    }
-    $args = array(
-        'role' => 'Administrator'
-    );
-    $users = get_users($args);
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'admin_message';
-    $table_name_2 = $wpdb->prefix . 'admin_users_message';
-    $current_user = wp_get_current_user();
-    $wpdb->insert(
-        $table_name,
-        array(
-            'time_create' => current_time('mysql'),
-            'creator_id' => $current_user->id,
-            'title' => $_POST['title'],
-            'description' => $_POST['description'],
-        )
-    );
-    $lastid = $wpdb->insert_id;
-    if ($_POST['user_id'] === '0' || null) {
-        foreach ($users as $user) {
-            $wpdb->insert(
-                $table_name_2,
-                array(
-                    'user_id' => $user->ID,
-                    'msg_id' => $lastid,
-                    'status' => 0,
-                )
-            );
-        };
-    } else {
-        $wpdb->insert(
-            $table_name_2,
-            array(
-                'user_id' => $_POST['user_id'],
-                'msg_id' => $lastid,
-                'status' => 0,
-            )
-        );
-    }
-    wp_die();
-
-
-}
-
-add_action('wp_ajax_save', 'save_msg');
-
-// change status message in database.
-
-function status_msg()
-{
-    if ( ! check_ajax_referer( 'ajax-nonce', 'security' ) ) {
-        wp_send_json_error( 'Invalid security token sent.' );
-        wp_die();
-    }
-    global $wpdb;
-
-    $newStatus = $_POST['status'];
-    $currentId = $_POST['user_id'];
-    $msgId = $_POST['msg_id'];
-    $table = $wpdb->prefix . 'admin_users_message';
-    $table_msg = $wpdb->prefix . 'admin_message';
-    $wpdb->update($table, array('status' => $newStatus), array('user_id' => $currentId, 'msg_id' => $msgId));
-    $wpdb->update($table_msg, array('time_edit' => current_time('mysql')), array('id' => $msgId));
-
-    wp_die();
-}
-
-add_action('wp_ajax_status', 'status_msg');
-
-// Create table in database sql
-
-register_activation_hook(__FILE__, 'my_plugin_create_db');
-function my_plugin_create_db()
-{
-
-    global $wpdb;
-    $version = get_option('my_plugin_version', '1.0');
-    $charset_collate = $wpdb->get_charset_collate();
-    $table_name = $wpdb->prefix . 'admin_message';
-    $table_name_2 = $wpdb->prefix . 'admin_users_message';
-
-
-    $sql = "CREATE TABLE $table_name (
-         id int   NOT NULL  AUTO_INCREMENT,
-         creator_id mediumint(9) NOT NULL ,
-         time_create datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-         time_edit datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-         title  varchar(40) DEFAULT '' NOT NULL,
-         description  text DEFAULT '' NOT NULL,
-          PRIMARY KEY (id)
-      ) $charset_collate;";
-    $sql2 = "CREATE TABLE $table_name_2 (
-        user_id mediumint(9) NOT NULL ,
-        msg_id mediumint(9) NOT NULL ,
-        status mediumint(9) NOT NULL
-) $charset_collate;";
-
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    dbDelta($sql);
-    dbDelta($sql2);
-
-    if (version_compare($version, '2.0') < 0) {
-
-        $sql = "CREATE TABLE $table_name (
-         id int   NOT NULL  AUTO_INCREMENT,
-         creator_id mediumint(9) NOT NULL ,
-         time_create datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-         time_edit datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-         title  varchar(40) DEFAULT '' NOT NULL,
-         description  text DEFAULT '' NOT NULL,
-         PRIMARY KEY (id)
-          ) $charset_collate;";
-        $sql2 = "CREATE TABLE $table_name_2 (
-        user_id mediumint(9) NOT NULL ,
-        msg_id mediumint(9) NOT NULL ,
-        status mediumint(9) NOT NULL
-        ) $charset_collate;";
-        dbDelta($sql2);
-        dbDelta($sql);
-
-        update_option('my_plugin_version', '2.0');
-
-    }
-
-
-}
-
-// get time ago
-
-function time_elapsed_string($datetime, $full = false)
-{
-    $now = new DateTime;
-    $ago = new DateTime($datetime);
-    $diff = $now->diff($ago);
-
-    $diff->w = floor($diff->d / 7);
-    $diff->d -= $diff->w * 7;
-
-    $string = array(
-        'y' => 'سال',
-        'm' => 'ماه',
-        'w' => 'هفته',
-        'd' => 'روز',
-        'h' => 'ساعت',
-        'i' => 'دقیقه',
-        's' => 'ثانیه',
-    );
-    foreach ($string as $k => &$v) {
-        if ($diff->$k) {
-            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? '' : '');
-        } else {
-            unset($string[$k]);
-        }
-    }
-
-    if (!$full) $string = array_slice($string, 0, 1);
-    return $string ? implode(', ', $string) . ' قبل' : 'just now';
-}
+//
+//function getMsgTable()
+//{
+//    if ( ! check_ajax_referer( 'ajax-nonce', 'security' ) ) {
+//        wp_send_json_error( 'Invalid security token sent.' );
+//        wp_die();
+//    }
+//
+//    global $wpdb;
+//    // table name
+//    $admin_users_message= $wpdb->prefix. "admin_users_message";
+//    $admin_message=$wpdb->prefix . "admin_message";
+//    $users=$wpdb->prefix . "users";
+//    //
+//    $userID = $_POST['id'];
+//    $table = "wp_admin_" . $_POST['table'];
+//    $limit = 10;
+//    $page = $_POST['page'];
+//    $offset = ($page - 1) * $limit;
+//    $_where = "$admin_users_message.status
+//     = 0 or $admin_users_message.status =2 ";
+//    if ($_POST['filter'] != '') {
+//        if ($_POST['filter'] === "all") {
+//            $_where = $_where . "or $admin_users_message.status =1 ";
+//        } else {
+//            $rule = $table . "." . $_POST['filter'] . "=" . $userID;
+//            $_where = $rule . " " . "and" . " " . $_where;
+//        }
+//
+//    }
+//
+//    $querystr = "SELECT tb1.* , $users.user_nicename as sender_name , $users.user_email  FROM (SELECT $admin_users_message.* ,
+//    $admin_message.* , $users.user_nicename as
+//    receiver_name FROM $admin_users_message LEFT JOIN $users ON $users.ID = $admin_users_message.user_id
+//    LEFT JOIN $admin_message ON $admin_users_message.msg_id = $admin_message.id WHERE " . $_where . ")
+//     as tb1 LEFT JOIN $users on tb1.creator_id = $users.ID LIMIT $offset , $limit";
+//    $data = $wpdb->get_results($querystr);
+//
+//    $total = $wpdb->get_var("select count(*) as total from $admin_users_message LEFT JOIN $admin_message ON
+//    $admin_users_message.msg_id = $admin_message.id  WHERE $_where");
+//
+//    $num_of_pages = ceil($total / $limit);
+//    wp_send_json(array($data, $num_of_pages));
+//}
+//
+//add_action('wp_ajax_table', 'getMsgTable');
+//
+//// Create modals for messages
+//
+//// get time ago
+//
+//function time_elapsed_string($datetime, $full = false)
+//{
+//    $now = new DateTime;
+//    $ago = new DateTime($datetime);
+//    $diff = $now->diff($ago);
+//
+//    $diff->w = floor($diff->d / 7);
+//    $diff->d -= $diff->w * 7;
+//
+//    $string = array(
+//        'y' => 'سال',
+//        'm' => 'ماه',
+//        'w' => 'هفته',
+//        'd' => 'روز',
+//        'h' => 'ساعت',
+//        'i' => 'دقیقه',
+//        's' => 'ثانیه',
+//    );
+//    foreach ($string as $k => &$v) {
+//        if ($diff->$k) {
+//            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? '' : '');
+//        } else {
+//            unset($string[$k]);
+//        }
+//    }
+//
+//    if (!$full) $string = array_slice($string, 0, 1);
+//    return $string ? implode(', ', $string) . ' قبل' : 'just now';
+//}
