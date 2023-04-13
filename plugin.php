@@ -1,43 +1,50 @@
 <?php
 /**
- * Plugin Name: Simple Admin Task
+ * The plugin bootstrap file.
+ *
+ * @link
+ * @since
+ *
+ * @wordpress-plugin
+ * Plugin Name:       Simple Admin Task
  * Plugin URI:
- * Description: Task manager for administrator
- * Version: 1.0.0
- * Author: Alireza Jafari
- * Author URI: https://alirezacrr.ir
- * License: GPL2
+ * Description:       Task manager for administrator
+ * Version:           1.0.0
+ * Author:            Alireza Jafari
+ * Author URI:        https://alirezacrr.ir
+ * License:           GPL-2.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * Text Domain:       admin-tl
+ * Domain Path:       /languages
  */
 
+defined('ABSPATH') || exit;
 
-// Add style and script
-
-function style()
-{
-    $siteurl = get_option('siteurl');
-    $url = $siteurl . '/wp-content/plugins/' . basename(dirname(__FILE__)) . '/assets/style.css';
-    echo "<link rel='stylesheet' type='text/css' href='$url' />\n";
-    wp_enqueue_style('admin-message-fontawesome', $siteurl . '/wp-content/plugins/' . basename(dirname(__FILE__)) . '/assets/font-awesome.min.css');
-
+// If this file is called directly, abort.
+if (!defined('WPINC')) {
+    die;
 }
 
-add_action('admin_head', 'style');
+if (!defined('ATL_FILE')) {
+    define('ATL_FILE', __FILE__);
+}
+$plugin_version = '1.0.0';
+$db_version = '1.0.0';
+/**
+ * ATL Version Define
+ */
+define('ATL_VERSION', $plugin_version);
+define('ATL_DB_VERSION', $plugin_version);
 
-function scripts()
-{
-    wp_enqueue_script('admin_msg_script', '/wp-content/plugins/' . basename(dirname(__FILE__)) . '/js/ajax.js' , array('jquery') , null , true);
-    wp_enqueue_script('admin_md5_script', '/wp-content/plugins/' . basename(dirname(__FILE__)) . '/js/md5.min.js');
-    wp_enqueue_script('admin_timeAgo_script', '/wp-content/plugins/' . basename(dirname(__FILE__)) . '/js/timeAgo.js');
-    wp_localize_script('admin_msg_script', 'ajax_var', array(
-        'url' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('ajax-nonce')
-    ));
+if (!class_exists('ATL', false)) {
+    include_once dirname(ATL_FILE) . '/inc/admin-task-list.php';
+    ATL::instance();
 }
 
-add_action('admin_enqueue_scripts', 'scripts');
 
 
 // add sub menu in dashboard
+add_action('admin_menu', 'my_plugin_menu');
 
 function my_plugin_menu()
 {
@@ -230,7 +237,6 @@ function my_plugin_function()
     <?php
 
 }
-add_action('admin_menu', 'my_plugin_menu');
 
 // Get messages for sub menu
 
