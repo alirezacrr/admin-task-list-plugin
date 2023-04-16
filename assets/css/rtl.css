@@ -1,5 +1,5 @@
 .atl-font {
-    font-family: cursive !important;
+    font-family: iranyekan !important;
 }
 
 .pointer {
@@ -19,7 +19,7 @@
 .topbutton {
     position: fixed;
     display: block;
-    right: 15px;
+    left: 15px;
     bottom: 15px;
     z-index: 10000;
     border-radius: 2px;
@@ -259,7 +259,7 @@
 }
 
 .des-txt {
-    text-align: left;
+    text-align: right;
     display: block;
     margin-bottom: 20px;
 }
@@ -340,27 +340,24 @@
 }
 
 .row-msg {
+    direction: rtl;
     padding: 20px 0;
     display: flex;
     border-bottom: 1px solid #dbdbdb;
     cursor: pointer;
-    padding-left: 5px;
-    border-radius: 10px;
+    padding-right: 5px;
 }
-.row-msg.on-processed{
-    pointer-events: none;
-    background: #e7e7e7;
-}
+
 .info-msg {
     width: 40%;
-    text-align: left;
+    text-align: right;
     display: flex;
 
 }
 
 .description-msg {
     width: 30%;
-    text-align: left;
+    text-align: right;
     padding: 20px 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -383,7 +380,7 @@
     width: 30%;
     padding-top: 10px;
     color: gray;
-    text-align: right;
+    text-align: left;
 }
 
 .avatar-msg img {
@@ -628,7 +625,7 @@ input.form-input:focus {
 }
 
 span.back-tab:before {
-    content: "\f341";
+    content: "\f345";
     font-family: 'dashicons';
     font-size: 14px;
     vertical-align: bottom;
