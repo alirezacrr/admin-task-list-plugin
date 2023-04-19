@@ -1,8 +1,14 @@
-.atl-font {
+.atl-font,
+.atl-font h1,
+.atl-font h2,
+.atl-font h3,
+.atl-font h4,
+.atl-font h5 {
     font-family: cursive !important;
 }
 
-.dashboard_page_atl-task-list .notice:not(.atl-notice) {
+.dashboard_page_atl-task-list .notice:not(.atl-notice),
+.toplevel_page_atl-task-list .notice:not(.atl-notice) {
     display: none !important;
 }
 
@@ -721,7 +727,7 @@ table.table-tasks tbody tr:nth-child(even) {
 }
 
 .pagination-list {
-   display: flex;
+    display: flex;
 }
 
 .footer-atl-table .total-task-count {
@@ -730,10 +736,12 @@ table.table-tasks tbody tr:nth-child(even) {
     bottom: 30px;
     font-weight: 700;
 }
+
 .pagination-list #btn_prev:before {
     content: "\f341";
     right: 0;
 }
+
 .pagination-list .btn {
     background: transparent;
     text-decoration: none;

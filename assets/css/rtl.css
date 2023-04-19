@@ -1,4 +1,9 @@
-.atl-font {
+.atl-font ,
+.atl-font h1,
+.atl-font h2,
+.atl-font h3,
+.atl-font h4,
+.atl-font h5{
     font-family: iranyekan !important;
 }
 .footer-atl-table .total-task-count {
@@ -20,7 +25,7 @@ table.table-tasks thead tr th:last-child {
     left: auto;
     content: "\f345";
 }
-.pagination-list #btn_next:before {
+.pagination-list #btn_next:after {
     right: auto;
     left: 0;
     content: "\f341";
@@ -37,7 +42,10 @@ table.table-tasks thead tr th:last-child {
 .info-msg ,.des-txt,.description-msg{
     text-align: right;
 }
-
+.pagination-list .btn {
+    margin-left: 10px;
+    margin-right: 0px;
+}
 .time_btn_msg{
     text-align: left;
 }

@@ -51,15 +51,27 @@ if (!class_exists('ATL')) {
             add_action('wp_ajax_status', array($this, 'status_msg'));
             add_action('wp_ajax_save', array($this, 'save_msg'));
             add_action('wp_ajax_table', array($this, 'get_task_data'));
-            add_action('admin_menu', array($this, 'sub_menu'));
+            add_action('admin_menu', array($this, '_action_admin_menu'));
 
+        }
+        /**
+         * @internal
+         */
+        public function _action_admin_menu()
+        {
+            add_menu_page(
+                __('Task List', 'atl'),
+                __('Task List', 'atl'),
+                'manage_options',
+                'atl-task-list',
+                array($this, 'sub_menu'),
+                'dashicons-list-view'
+            );
         }
 
         public function sub_menu()
         {
-            add_dashboard_page(__('Admin Task List', 'atl'), __('Admin Task List', 'atl'), 'manage_options', 'atl-task-list', 'menu_callback');
-            function menu_callback()
-            {
+
                 global $wpdb;
                 $admin_message = $wpdb->prefix . 'atl_admin_message';
                 //
@@ -77,7 +89,7 @@ if (!class_exists('ATL')) {
                 $next_page = $page !== $num_of_pages ? $page + 1 : $page;
                 $prev_page = $page !== 1 ? $page - 1 : $page;
                 ?>
-                <div class="atl-page-content">
+                <div class="atl-page-content atl-font">
                     <h1 class="headline">- <?php _e('All Tasks', 'atl'); ?></h1>
                     <?php if (!$all_messages): ?>
                         <div class="task-empty"><?php _e('There is no task !', 'atl') ?></div>
@@ -126,10 +138,10 @@ if (!class_exists('ATL')) {
                         <div class="footer-atl-table">
                             <div class="pagination-list">
                                 <a href="<?php echo add_query_arg('paged', $prev_page) ?>"
-                                   class="btn <?php echo $page === 1 ? 'disabled' : '' ?>" id="btn_prev">Prev</a>
+                                   class="btn <?php echo $page === 1 ? 'disabled' : '' ?>" id="btn_prev"><?php _e('Prev','atl'); ?></a>
                                 <a href="<?php echo add_query_arg('paged', $next_page) ?>"
                                    class="btn <?php echo $page === $num_of_pages ? 'disabled' : '' ?>"
-                                   id="btn_next">Next</a>
+                                   id="btn_next"><?php _e('Next','atl'); ?></a>
                             </div>
                             <span class="total-task-count"><?php echo sprintf(__('Total : %s'), $total) ?></span>
                         </div>
@@ -139,7 +151,6 @@ if (!class_exists('ATL')) {
 
                 <?php
 
-            }
         }
 
 

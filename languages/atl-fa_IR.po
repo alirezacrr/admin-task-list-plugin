@@ -1,0 +1,202 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Simple Admin Task\n"
+"POT-Creation-Date: 2023-04-19 18:56+0330\n"
+"PO-Revision-Date: 2023-04-19 18:56+0330\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+"X-Generator: Poedit 2.2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: plugin.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: inc/admin-task-list.php:63 inc/admin-task-list.php:64
+msgid "Task List"
+msgstr "لیست وظایف"
+
+#: inc/admin-task-list.php:94
+msgid "All Tasks"
+msgstr "همه وظیفه ها"
+
+#: inc/admin-task-list.php:96
+msgid "There is no task !"
+msgstr "وظیفه ای وجود ندارد !"
+
+#: inc/admin-task-list.php:97
+msgid "create new task"
+msgstr "ایجاد وظیفه جدید"
+
+#: inc/admin-task-list.php:103 inc/admin-task-list.php:114
+msgid "Title"
+msgstr "عنوان"
+
+#: inc/admin-task-list.php:104 inc/admin-task-list.php:115
+msgid "Creator"
+msgstr "سازنده"
+
+#: inc/admin-task-list.php:105 inc/admin-task-list.php:118
+msgid "Receiver"
+msgstr "دریافت کننده"
+
+#: inc/admin-task-list.php:106 inc/admin-task-list.php:127
+msgid "Status"
+msgstr "وضعیت"
+
+#: inc/admin-task-list.php:107 inc/admin-task-list.php:130
+msgid "Action"
+msgstr "عملیات"
+
+#: inc/admin-task-list.php:120
+msgid "ALL"
+msgstr "همه"
+
+#: inc/admin-task-list.php:133
+msgid "View"
+msgstr "مشاهده"
+
+#: inc/admin-task-list.php:142
+msgid "Prev"
+msgstr "قبلی"
+
+#: inc/admin-task-list.php:145
+msgid "Next"
+msgstr "بعدی"
+
+#: inc/admin-task-list.php:147
+#, php-format
+msgid "Total : %s"
+msgstr "مجموع : %s"
+
+#: inc/admin-task-list.php:277 inc/helper.php:24
+msgid "year"
+msgstr "سال"
+
+#: inc/admin-task-list.php:278 inc/helper.php:25
+msgid "month"
+msgstr "ماه"
+
+#: inc/admin-task-list.php:279 inc/helper.php:26
+msgid "week"
+msgstr "هفته"
+
+#: inc/admin-task-list.php:280 inc/helper.php:27
+msgid "day"
+msgstr "روز"
+
+#: inc/admin-task-list.php:281 inc/helper.php:28
+msgid "hours"
+msgstr "ساعت"
+
+#: inc/admin-task-list.php:282 inc/helper.php:29
+msgid "min"
+msgstr "دقیقه"
+
+#: inc/admin-task-list.php:283 inc/helper.php:30
+msgid "sec"
+msgstr "ثانیه"
+
+#: inc/admin-task-list.php:284
+msgid "ago"
+msgstr "پیش"
+
+#: inc/admin-task-list.php:285
+msgid "It is required to fill in the title and select the user"
+msgstr "پر کردن عنوان و انتخاب کاربر الزامی است"
+
+#: inc/helper.php:41
+msgid " ago "
+msgstr " پیش "
+
+#: inc/helper.php:41
+msgid "just now"
+msgstr "لحظه ای پیش"
+
+#: inc/helper.php:46
+msgid "Pending"
+msgstr "در انتظار"
+
+#: inc/helper.php:48 templates/modal.php:139 templates/modal.php:175
+msgid "Done"
+msgstr "انجام شده"
+
+#: inc/helper.php:50
+msgid "Unknown"
+msgstr "ناشناس"
+
+#: templates/modal.php:38
+msgid "Add New"
+msgstr "اضافه کردن"
+
+#: templates/modal.php:40
+msgid "Your Tasks"
+msgstr "وظایف شما"
+
+#: templates/modal.php:45
+msgid "Add New Task"
+msgstr "وظیفه جدید"
+
+#: templates/modal.php:50
+msgid "title"
+msgstr "عنوان"
+
+#: templates/modal.php:57
+msgid "users"
+msgstr "کاربران"
+
+#: templates/modal.php:71
+msgid "SELECT"
+msgstr "انتخاب"
+
+#: templates/modal.php:86
+msgid "Description"
+msgstr "توضیحات"
+
+#: templates/modal.php:92
+msgid "Submit"
+msgstr "ارسال کردن"
+
+#: templates/modal.php:97
+msgid "Only admins can create new tasks!"
+msgstr "فقط ادمین ها می توانند وظایف جدید ایجاد کنند!"
+
+#: templates/modal.php:102
+msgid "Your Task List"
+msgstr "لیست وظایف شما"
+
+#: templates/modal.php:104
+msgid "You have no task to perform"
+msgstr "شما هیچ وظیفه ای برای انجام ندارید"
+
+#: templates/modal.php:150
+msgid "Back"
+msgstr "بازگشت"
+
+#. Plugin Name of the plugin/theme
+msgid "Simple Admin Task Plugin"
+msgstr "افزونه لیست وظایف ساده"
+
+#. Description of the plugin/theme
+msgid "Task manager for administrator"
+msgstr "مدیریت وظایف برای ادمین ها"
+
+#. Author of the plugin/theme
+msgid "Alireza Jafari"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://alirezacrr.ir"
+msgstr ""
+
+#~ msgid "Admin Task List"
+#~ msgstr "لیست وظیفه مدیر"

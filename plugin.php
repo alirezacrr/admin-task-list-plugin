@@ -6,7 +6,7 @@
  * @since
  *
  * @wordpress-plugin
- * Plugin Name:       Simple Admin Task
+ * Plugin Name:       Simple Admin Task Plugin
  * Plugin URI:
  * Description:       Task manager for administrator
  * Version:           1.0.0

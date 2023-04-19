@@ -38,7 +38,7 @@ class ATL_Helper{
         }
 
         if (!$full) $string = array_slice($string, 0, 1);
-        return $string ? implode(', ', $string) . __(' aog ','atl') :__('just now','atl') ;
+        return $string ? implode(', ', $string) . __(' ago ','atl') :__('just now','atl') ;
     }
     static function get_status_label($status){
         switch ($status){
