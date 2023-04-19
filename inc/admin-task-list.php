@@ -52,6 +52,7 @@ if (!class_exists('ATL')) {
             add_action('wp_ajax_save', array($this, 'save_msg'));
             add_action('wp_ajax_table', array($this, 'get_task_data'));
             add_action('admin_menu', array($this, '_action_admin_menu'));
+            Load_Theme_TextDomain('atl', ATL_ABSPATH . 'languages');
 
         }
         /**
