@@ -15,7 +15,6 @@ if (!class_exists('ATL_DB')) {
          */
         private $_table_prefix;
         private $_table_admin_message;
-        private $_table_admin_users_message;
 
         private $_num_tables;
 
@@ -44,18 +43,15 @@ if (!class_exists('ATL_DB')) {
             global $wpdb;
 
 
-            $this->_num_tables = 2;
+            $this->_num_tables = 1;
 
             $this->_table_prefix = $wpdb->prefix . 'atl_';
             $this->_table_admin_message = $wpdb->prefix . 'atl_admin_message';
-            $this->_table_admin_users_message = $wpdb->prefix . 'atl_admin_users_message';
 
             $wpdb->atl_table_admin_message = $this->_table_admin_message;
-            $wpdb->atl_table_admin_users_message = $this->_table_admin_users_message;
 
 
             define('ATL_ADMIN_MESSAGE_TABLE', $this->_table_admin_message);
-            define('ATL_ADMIN_USERS_MESSAGE_TABLE', $this->_table_admin_users_message);
 
 
         }
@@ -127,7 +123,6 @@ if (!class_exists('ATL_DB')) {
         private function _add_tables()
         {
             $this->_add_message();
-            $this->_add_users_message();
         }
 
 
@@ -143,27 +138,13 @@ if (!class_exists('ATL_DB')) {
          title  varchar(40) DEFAULT '' NOT NULL,
          description  text DEFAULT '' NOT NULL,
          status varchar(20) DEFAULT 'pending' NOT NULL,
-         done_by  mediumint(9) ,
+         user_id mediumint(9) NOT NULL ,
          		  UNIQUE KEY id (id)
 				)DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ; ";
                 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
                 dbDelta($sql);
             }
         }
-
-        private function _add_users_message()
-        {
-            global $wpdb;
-            if (!$this->is_installed() || version_compare(get_option('atl_db_version'), '1.0.0', '<')) {
-                $sql = "CREATE TABLE {$this->_table_admin_users_message} (
-		   user_id mediumint(9) NOT NULL ,
-        msg_id mediumint(9) NOT NULL 
-						)DEFAULT CHARSET=utf8; ";
-                require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-                dbDelta($sql);
-            }
-        }
-
 
     }
 }

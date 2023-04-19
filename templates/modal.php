@@ -2,26 +2,31 @@
 global $wpdb;
 // table name
 $admin_message = $wpdb->prefix . 'atl_admin_message';
-$admin_users_message = $wpdb->prefix . 'atl_admin_users_message';
 $users = $wpdb->prefix . "users";
 
 //
 $current_user_id = get_current_user_id();
-$my_msg = $wpdb->get_results("SELECT id  FROM $admin_message  LEFT JOIN $admin_users_message ON $admin_message.id = $admin_users_message.msg_id WHERE $admin_users_message.user_id = $current_user_id  and  $admin_message.status = 'pending'");
-$chack_msg = !empty($my_msg );
-$querystr = "SELECT tb1.* , $users.user_nicename as sender_name , $users.user_email  FROM (SELECT $admin_users_message.* , $admin_message.* , $users.user_nicename as
-    receiver_name FROM $admin_users_message LEFT JOIN $users ON $users.ID = $admin_users_message.user_id
-    LEFT JOIN $admin_message ON $admin_users_message.msg_id = $admin_message.id WHERE  $admin_users_message.user_id = $current_user_id and $admin_message.status != 'done')
-     as tb1 LEFT JOIN $users on tb1.creator_id = $users.ID  ";
+$querystr = "SELECT * From $admin_message Where user_id = $current_user_id and status != 'done' ";
 $data = $wpdb->get_results($querystr);
+$chack_msg = !empty($data);
+$toggle_class = '';
+$toggle_tab = 'task-list';
+if (current_user_can('administrator')) {
+    $toggle_class = $chack_msg ? 'have-msg' : '';
+    $toggle_tab = $chack_msg ? 'task-list' : 'new';
+}
+
 ?>
 
 <div class="have-modal">
-    <a class="pointer topbutton openModal <?php echo $chack_msg ? 'have-msg' : '' ?>"
-       data-tab="<?php echo $chack_msg ? 'task-list' : 'new' ?>">
+
+    <a class="pointer topbutton openModal <?php echo $toggle_class ?>"
+       data-tab="<?php echo $toggle_tab ?>">
         <img class="btn_sticky"
-             src="<?php echo $chack_msg ? plugin_dir_url(__FILE__) . '../assets/img/icons/haveMsg.png' : plugin_dir_url(__FILE__) . '../assets/img/icons/noMsg.png'; ?>">
+             src="<?php echo $chack_msg ? plugin_dir_url(__FILE__) . '../assets/img/icons/haveMsg.png' : plugin_dir_url(__FILE__) . '../assets/img/icons/noMsg.png'; ?>"
+             alt="modal">
     </a>
+
 </div>
 <div class="modal atl-font">
     <div class="modal-content">
@@ -29,65 +34,77 @@ $data = $wpdb->get_results($querystr);
             <span class="close-button">&times;</span>
 
             <ul class="nav nav-tabs">
-                <li class=""><a href="#new" data-toggle="tab"><?php _e('Add New', 'atl'); ?></a></li>
-                <li class=""><a href="#task-list" data-toggle="tab"><?php _e('Task List', 'atl'); ?></a></li>
+                <?php if (current_user_can('administrator')): ?>
+                <li class=""><a href="#new" data-toggle="new"><?php _e('Add New', 'atl'); ?></a></li>
+                <?php endif; ?>
+                <li class=""><a href="#task-list" data-toggle="task-list"><?php _e('Your Tasks', 'atl'); ?></a></li>
             </ul>
 
             <div class="tab-content">
                 <div class="tab-pane " id="new">
-                    <h5><?php _e('Add New Task','atl'); ?></h5>
+                    <h5><?php _e('Add New Task', 'atl'); ?></h5>
                     <div class="content-dialog">
-                        <header class="wf-header-modal">
-                            <div class="row-head box-title-write">
-                                <span class="txt-label"><?php _e('title','atl'); ?></span>
-                                <div class="row-content box-design input-title-div">
-                                    <input type="text" class="form-input" id="input-title" maxlength="40">
+                        <?php if (current_user_can('administrator')) : ?>
+                            <header class="wf-header-modal">
+                                <div class="row-head box-title-write">
+                                    <span class="txt-label"><?php _e('title', 'atl'); ?></span>
+                                    <div class="row-content box-design input-title-div">
+                                        <input type="text" class="form-input" id="input-title" maxlength="40">
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="row-head box-user-select">
-                                <span class="txt-label"><?php _e('users','atl'); ?></span>
-                                <div class="row-content select-user">
-                                    <select class="atl-select select2 msg-users" id="msg_users" name="msg_users[]"
-                                            multiple="multiple">
-                                        <?php
+                                <div class="row-head box-user-select">
+                                    <span class="txt-label"><?php _e('users', 'atl'); ?></span>
+                                    <div class="row-content select-user">
+                                        <select class="atl-select select2 msg-users" id="msg_users" name="msg_users">
+                                            <?php
+                                            $args = array(
+                                                'role__in' => array('author', 'administrator', 'editor')
+                                            );
+                                            $users_admin = get_users($args);
 
-                                        $args = array(
-                                            'role' => 'Administrator'
-                                        );
-                                        $users_admin = get_users($args);
-
-                                        ?>
-                                        <?php foreach ($users_admin as $user) : ?>
-                                            <option value="<?php echo esc_html($user->ID) ?>">
-                                                <?php echo esc_html($user->display_name) ?>
+                                            ?>
+                                            <!--                                        <option value="0">-->
+                                            <!--                                            --><?php //_e('All Users','atl') ?>
+                                            <!--                                        </option>-->
+                                            <option value="">
+                                                <?php _e('SELECT', 'atl') ?>
                                             </option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                            <?php foreach ($users_admin as $user) : ?>
+                                                <option value="<?php echo esc_html($user->ID) ?>">
+                                                    <?php echo esc_html($user->display_name) ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
                                 </div>
-                                <small><?php _e('Note : empty to send to all','atl'); ?></small>
+
+                            </header>
+
+
+                            <div class="more-description">
+                                <span class="des-txt"><?php _e('Description', 'atl'); ?></span>
+                                <textarea id="description-area" class=" box-design" cols="30" rows="10"></textarea>
                             </div>
+                            <footer class="wf-footer-modal">
+                                <button class="btn_status btn_submit" id="saveMsg"
+                                        aria-hidden="true">
+                                    <?php _e('Submit', 'atl'); ?>
+                                </button>
+                            </footer>
 
-                        </header>
-
-
-                        <div class="more-description">
-                            <span class="des-txt"><?php _e('Description','atl'); ?></span>
-                            <textarea  id="description-area" class=" box-design" cols="30" rows="10"></textarea>
-                        </div>
-                        <footer class="wf-footer-modal">
-                            <button class="btn_status btn_submit" id="saveMsg"
-                                    aria-hidden="true">
-                                <?php _e('Submit','atl'); ?>
-                            </button>
-                        </footer>
+                        <?php else: ?>
+                            <div class="access-denied"><?php _e('Only admins can create new tasks!', 'atl'); ?></div>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="tab-pane " id="task-list">
-                    <div>
+                    <h5><?php _e('Your Task List', 'atl'); ?></h5>
+                    <div class="task-items <?php echo empty($data) ? 'empty' : '' ?>"
+                         data-empty="<?php _e('You have no task to perform', 'atl'); ?>">
                         <?php
                         foreach ($data as $msg) { ?>
-                            <div class="row-msg msg-item" id="msg-id-<?php echo $msg->msg_id ?>"
+                            <div class="row-msg msg-item" id="msg-id-<?php echo $msg->id ?>"
                                  data-msg-detailed="<?php echo htmlspecialchars(json_encode($msg),
                                      ENT_QUOTES, 'UTF-8') ?>">
                                 <div class="info-msg">
@@ -97,7 +114,8 @@ $data = $wpdb->get_results($querystr);
                                     <div class="header-msg">
                                         <div class="name-msg">
                                             <?php
-                                            echo $msg->sender_name;
+                                            $sender = get_userdata($msg->creator_id);
+                                            echo $sender->user_login;
                                             ?>
                                         </div>
                                         <div class="title-msg title-all-msg ">
@@ -112,23 +130,24 @@ $data = $wpdb->get_results($querystr);
                                 <div class="description-msg"><?php echo $msg->description; ?></div>
                                 <div class="time_btn_msg">
                                     <?php echo ATL_Helper::time_elapsed_string($msg->time_create); ?>
-                                    <button class="btn_status btn_submit changeStatus"
-                                            data-user-id="<?php echo $current_user_id ?>"
-                                            data-msg-id="<?php echo $msg->msg_id ?>"
-                                            data-status="done"
-                                            aria-hidden="true">
-                                        <?php _e('Done','atl'); ?>
-                                    </button>
+                                    <?php if ((int)$msg->user_id === $current_user_id): ?>
+                                        <button class="btn_status btn_submit changeStatus"
+                                                data-user-id="<?php echo $msg->user_id ?>"
+                                                data-msg-id="<?php echo $msg->id ?>"
+                                                data-status="done"
+                                                aria-hidden="true">
+                                            <?php _e('Done', 'atl'); ?>
+                                        </button>
+                                    <?php endif; ?>
                                 </div>
                             </div>
-
                         <?php } ?>
                     </div>
                 </div>
                 <div class="tab-pane " id="tab-hide">
                     <div>
                         <span class="back-tab">
-                            <?php _e('Back','atl'); ?></span>
+                            <?php _e('Back', 'atl'); ?></span>
                         <header class="header-show-msg">
                             <div class="row-msg">
                                 <div class="info-msg">
@@ -150,14 +169,10 @@ $data = $wpdb->get_results($querystr);
                                 <div class="time_btn_msg tbm">
                                     <span id="time-msg">
                                     </span>
-                                    <!--                                    <button class="btn_status btn_check changeStatus"-->
-                                    <!--                                            id="btn_check"-->
-                                    <!--                                    >نیاز به بررسی-->
-                                    <!--                                    </button>-->
-                                    <button class="btn_status btn_submit changeStatus"
-                                            id="btn_submit"
+                                    <button class="btn_status btn_submit changeStatus" id="btn_submit"
+                                            data-status="done"
                                     >
-                                        <?php _e('Done','atl'); ?>
+                                        <?php _e('Done', 'atl'); ?>
                                     </button>
                                 </div>
                             </div>
@@ -174,3 +189,4 @@ $data = $wpdb->get_results($querystr);
         </div>
     </div>
 </div>
+<input type="hidden" id="atl-get-uid" value="<?php echo $current_user_id ?>">

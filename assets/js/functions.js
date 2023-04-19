@@ -15,26 +15,32 @@ jQuery(document).ready(function ($) {
 // save message ajax
 
     $("#saveMsg").on('click', function () {
-        var users_id = $('#msg_users').val();
+        let self = this;
+        var user_id = $('#msg_users').val();
         var title = $('#input-title').val();
         var description = $('#description-area').val();
-        console.log(users_id, title)
-        if (title === '') {
-            alert('پر کردن عنوان و انتخاب کاربر ضروری است!')
+        if (user_id === '' || title === '') {
+            alert(l10n.required_user_and_title)
         } else {
+            $(self).addClass('event-none')
             //  Save message
             jQuery.ajax({
                 type: 'POST',
                 data: {
                     action: 'save',
                     security: ajax_var.nonce,
-                    users_id: users_id,
+                    user_id: user_id,
                     title: title,
                     description: description
                 },
                 url: ajax_var.url,
                 success: function (resp) {
-                   window.location.reload()
+                    $(self).removeClass('event-none')
+                    window.location.reload()
+                } ,
+                error: function () {
+                    swalErrorConnection();
+                    remove_loading_by_id(id_loading_elm);
                 }
             });
         }
@@ -52,7 +58,6 @@ jQuery(document).ready(function ($) {
             data: {
                 action: 'status',
                 security: ajax_var.nonce,
-                users_id: $(this).data('user-id'),
                 msg_id: $(this).data('msg-id'),
                 status: status
             },
@@ -101,7 +106,6 @@ jQuery(document).ready(function ($) {
         function windowOnClick(event) {
             if (event.target === modal) {
                 toggleModal();
-
             }
         }
 
@@ -138,39 +142,60 @@ jQuery(document).ready(function ($) {
             var tab = $(this).data('tab');
             $tabButtonItem.removeClass(activeClass);
             $tabContents.hide();
-            $('#' + tab).addClass(activeClass);
+            $('[data-toggle="'+tab+'"]').parent().addClass(activeClass);
             $('#' + tab).show();
+            $('.back-tab').show();
+            $('.nav-tabs').show();
         });
 
         $('.msg-item').on('click', function (e) {
             if (e.target.tagName !== "BUTTON") {
-                console.log(e.target.tagName)
                 $tabButtonItem.removeClass(activeClass);
                 $tabContents.hide();
-                $('#tab-hide').addClass(activeClass);
-                $('#tab-hide').show();
-                var msgData = $(this).data('msg-detailed');
-                console.log(msgData)
-                var email = msgData.user_email;
-                var gravatar = $('<img>').attr({src: 'https://www.gravatar.com/avatar/' + md5(email)});
-                $('#avatar-msg').html(gravatar);
-                $('#name-msg').text(msgData.sender_name);
-                $('#title-msg').text(msgData.title);
-                $('#description-msg').text(msgData.description);
-                $('#time-msg').text(ago(new Date(msgData.time_create)));
+                show_detail_modal(this)
+            }
+        })
+        $('#create-task').on('click', function (e) {
+            toggleModal();
+            $tabButtonItem.removeClass(activeClass);
+            $tabContents.hide();
+            $('#new').addClass(activeClass);
+            $('#new').show();
+        })
+
+        $('.view-msg').on('click', function (e) {
+            toggleModal();
+            $tabButtonItem.removeClass(activeClass);
+            $tabContents.hide();
+            show_detail_modal(this)
+            $('.back-tab').hide();
+            $('.nav-tabs').hide();
+
+        })
+        function show_detail_modal(e){
+            $('#tab-hide').addClass(activeClass);
+            $('#tab-hide').show();
+            let uid = $('#atl-get-uid').val();
+            let msgData = $(e).data('msg-detailed');
+            let email = msgData.user_email;
+            let gravatar = $('<img>').attr({src: 'https://www.gravatar.com/avatar/' + md5(email)});
+            $('#avatar-msg').html(gravatar);
+            $('#name-msg').text(msgData.sender_name);
+            $('#title-msg').text(msgData.title);
+            $('#description-msg').text(msgData.description);
+            $('#time-msg').text(ago(new Date(msgData.time_create)));
+            if (uid === msgData.user_id){
                 $('#btn_submit').attr({
                     'data-user-id': msgData.user_id,
                     'data-msg-id': msgData.msg_id,
-                    'data-status': 1
+                    'data-status': 'done'
                 });
-                $('#btn_check').attr({
-                    'data-user-id': msgData.user_id,
-                    'data-msg-id': msgData.msg_id,
-                    'data-status': 2
-                });
+            }else {
+                $('#btn_submit').hide()
             }
 
-        })
+
+        }
         $('.back-tab').on('click', function (e) {
             $tabButtonItem.removeClass(activeClass);
             $tabContents.hide();

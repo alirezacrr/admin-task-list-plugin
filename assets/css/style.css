@@ -2,6 +2,10 @@
     font-family: cursive !important;
 }
 
+.dashboard_page_atl-task-list .notice:not(.atl-notice) {
+    display: none !important;
+}
+
 .pointer {
     cursor: pointer;
 }
@@ -265,13 +269,16 @@
 }
 
 #description-area {
-    resize: none;
     width: 100%;
     margin: auto;
-    height: 100%;
+    height: 150px;
     outline: none;
     box-shadow: none;
     padding: 10px;
+}
+
+.event-none {
+    pointer-events: none;
 }
 
 .select-user, .select-user .select2-container {
@@ -347,10 +354,12 @@
     padding-left: 5px;
     border-radius: 10px;
 }
-.row-msg.on-processed{
+
+.row-msg.on-processed {
     pointer-events: none;
     background: #e7e7e7;
 }
+
 .info-msg {
     width: 40%;
     text-align: left;
@@ -396,9 +405,11 @@
     padding: 10px;
     width: 70%;
 }
+
 .hidden-overflow {
     overflow: hidden;
 }
+
 .name-msg {
     color: #5e5e5e
 }
@@ -594,14 +605,22 @@ input.form-input:focus {
 
 /* active tab color */
 
-.nav-tabs > li.active > a,
-.nav-tabs > li.active > a:hover,
-.nav-tabs > li.active > a:focus {
+.nav-tabs > li > a {
     background-color: #ebebeb;
     border: 0;
-    border-style: solid;
     padding: 5px;
+    color: #686868;
     border-radius: 3px 3px 0 0;
+}
+
+.nav-tabs > li.active > a {
+    background: #a6d58f;
+    color: white;
+}
+
+.nav-tabs > li > a:hover,
+.nav-tabs > li > a:focus {
+    border: 0;
     outline: none;
 
 }
@@ -633,10 +652,167 @@ span.back-tab:before {
     font-size: 14px;
     vertical-align: bottom;
 }
+
 span.back-tab {
     color: red;
     cursor: pointer;
 }
+
 .row-msg:hover {
     background: #e8e8e87a;
+}
+
+.task-items:not(:has(.row-msg)):before {
+    content: attr(data-empty);
+}
+
+.atl-page-content {
+    padding: 20px;
+}
+
+table.table-tasks {
+    width: 100%;
+    font-size: 18px;
+    border-collapse: collapse;
+}
+
+table.table-tasks td,
+table.table-tasks th {
+    padding: 16px 24px;
+    text-align: center;
+}
+
+table.table-tasks thead tr {
+    background-color: #087f5b;
+    color: #fff;
+}
+
+table.table-tasks .view-msg {
+    padding: 5px 20px;
+    border: none;
+    border-radius: 5px;
+    background: #1e9571;
+    color: white;
+}
+
+table.table-tasks thead tr th:first-child {
+    border-radius: 6px 0 0 6px !important;
+}
+
+table.table-tasks thead tr th:last-child {
+    border-radius: 0 6px 6px 0 !important;
+}
+
+table.table-tasks thead th {
+    width: 25%;
+}
+
+table.table-tasks tbody tr:nth-child(odd) {
+    background-color: #f8f9fa;
+}
+
+table.table-tasks tbody tr:nth-child(even) {
+    background-color: #e9ecef;
+}
+
+.footer-atl-table {
+    position: relative;
+    padding: 20px 0;
+}
+
+.pagination-list {
+   display: flex;
+}
+
+.footer-atl-table .total-task-count {
+    position: absolute;
+    right: 0;
+    bottom: 30px;
+    font-weight: 700;
+}
+.pagination-list #btn_prev:before {
+    content: "\f341";
+    right: 0;
+}
+.pagination-list .btn {
+    background: transparent;
+    text-decoration: none;
+    padding: 10px 30px;
+    border: 1px solid #11c611;
+    color: #303030;
+    border-radius: 10px;
+    font-size: 14px;
+    position: relative;
+    margin-right: 10px;
+}
+
+.pagination-list .btn.disabled {
+    background: #bfbfbf;
+    border-color: transparent;
+    color: white;
+    pointer-events: none
+}
+
+.pagination-list .btn:before,
+.pagination-list .btn:after {
+    font-family: dashicons;
+    vertical-align: middle;
+    position: absolute;
+    font-size: 18px;
+}
+
+.pagination-list #btn_next:after {
+    content: "\f345";
+    right: 0;
+}
+
+.pagination-list #btn_prev:before {
+    content: "\f341";
+    left: 0;
+}
+
+#create-task {
+    margin-top: 10px;
+    border: none;
+    padding: 10px;
+    background: #9abf87;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.atl-page-content .headline {
+    margin-bottom: 40px;
+}
+
+.task-items.empty {
+    text-align: center;
+    padding: 30px;
+    color: #949494;
+}
+
+.nav-tabs li:first-child {
+    margin-left: 0;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #cbcbcb;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
