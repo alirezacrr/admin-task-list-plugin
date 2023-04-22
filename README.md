@@ -30,5 +30,5 @@ Simply deactivate and delete the plugin.
 
 ![Plugin Screenshot 1](http://alirezacrr.ir/wp-content/uploads/2023/04/screenshot-1.png)
 
-![Plugin Screenshot 2](http://alirezacrr.ir/wp-content/uploads/2023/04/screenshot-2.png)
+![Plugin Screenshot 2](http://alirezacrr.ir/wp-content/uploads/2023/04/screenshot-2-1.png)
 
