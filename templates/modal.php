@@ -21,42 +21,42 @@ if (current_user_can('administrator')) {
 <div class="have-modal">
 
     <a class="pointer topbutton openModal <?php echo $toggle_class ?>"
-       data-tab="<?php echo $toggle_tab ?>">
+       data-tab="<?php esc_html_e($toggle_tab)  ?>">
         <img class="btn_sticky"
              src="<?php echo $chack_msg ? plugin_dir_url(__FILE__) . '../assets/img/icons/haveMsg.png' : plugin_dir_url(__FILE__) . '../assets/img/icons/noMsg.png'; ?>"
              alt="modal">
     </a>
 
 </div>
-<div class="modal atl-font">
+<div class="modal satl-font">
     <div class="modal-content">
         <div class="wrap">
             <span class="close-button">&times;</span>
 
             <ul class="nav nav-tabs">
                 <?php if (current_user_can('administrator')): ?>
-                <li class=""><a href="#new" data-toggle="new"><?php _e('Add New', 'atl'); ?></a></li>
+                <li class=""><a href="#new" data-toggle="new"><?php _e('Add New', 'satl'); ?></a></li>
                 <?php endif; ?>
-                <li class=""><a href="#task-list" data-toggle="task-list"><?php _e('Your Tasks', 'atl'); ?></a></li>
+                <li class=""><a href="#task-list" data-toggle="task-list"><?php _e('Your Tasks', 'satl'); ?></a></li>
             </ul>
 
             <div class="tab-content">
                 <div class="tab-pane " id="new">
-                    <h5><?php _e('Add New Task', 'atl'); ?></h5>
+                    <h5><?php _e('Add New Task', 'satl'); ?></h5>
                     <div class="content-dialog">
                         <?php if (current_user_can('administrator')) : ?>
                             <header class="wf-header-modal">
                                 <div class="row-head box-title-write">
-                                    <span class="txt-label"><?php _e('title', 'atl'); ?></span>
+                                    <span class="txt-label"><?php _e('title', 'satl'); ?></span>
                                     <div class="row-content box-design input-title-div">
                                         <input type="text" class="form-input" id="input-title" maxlength="40">
                                     </div>
                                 </div>
 
                                 <div class="row-head box-user-select">
-                                    <span class="txt-label"><?php _e('users', 'atl'); ?></span>
+                                    <span class="txt-label"><?php _e('users', 'satl'); ?></span>
                                     <div class="row-content select-user">
-                                        <select class="atl-select select2 msg-users" id="msg_users" name="msg_users">
+                                        <select class="satl-select select2 msg-users" id="msg_users" name="msg_users">
                                             <?php
                                             $args = array(
                                                 'role__in' => array('author', 'administrator', 'editor')
@@ -65,14 +65,14 @@ if (current_user_can('administrator')) {
 
                                             ?>
                                             <!--                                        <option value="0">-->
-                                            <!--                                            --><?php //_e('All Users','atl') ?>
+                                            <!--                                            --><?php //_e('All Users','satl') ?>
                                             <!--                                        </option>-->
                                             <option value="">
-                                                <?php _e('SELECT', 'atl') ?>
+                                                <?php _e('SELECT', 'satl') ?>
                                             </option>
                                             <?php foreach ($users_admin as $user) : ?>
-                                                <option value="<?php echo esc_html($user->ID) ?>">
-                                                    <?php echo esc_html($user->display_name) ?>
+                                                <option value="<?php echo esc_html_e($user->ID) ?>">
+                                                    <?php echo esc_html_e($user->display_name) ?>
                                                 </option>
                                             <?php endforeach; ?>
                                         </select>
@@ -83,25 +83,25 @@ if (current_user_can('administrator')) {
 
 
                             <div class="more-description">
-                                <span class="des-txt"><?php _e('Description', 'atl'); ?></span>
+                                <span class="des-txt"><?php _e('Description', 'satl'); ?></span>
                                 <textarea id="description-area" class=" box-design" cols="30" rows="10"></textarea>
                             </div>
                             <footer class="wf-footer-modal">
                                 <button class="btn_status btn_submit" id="saveMsg"
                                         aria-hidden="true">
-                                    <?php _e('Submit', 'atl'); ?>
+                                    <?php _e('Submit', 'satl'); ?>
                                 </button>
                             </footer>
 
                         <?php else: ?>
-                            <div class="access-denied"><?php _e('Only admins can create new tasks!', 'atl'); ?></div>
+                            <div class="access-denied"><?php _e('Only admins can create new tasks!', 'satl'); ?></div>
                         <?php endif; ?>
                     </div>
                 </div>
                 <div class="tab-pane " id="task-list">
-                    <h5><?php _e('Your Task List', 'atl'); ?></h5>
+                    <h5><?php _e('Your Task List', 'satl'); ?></h5>
                     <div class="task-items <?php echo empty($data) ? 'empty' : '' ?>"
-                         data-empty="<?php _e('You have no task to perform', 'atl'); ?>">
+                         data-empty="<?php _e('You have no task to perform', 'satl'); ?>">
                         <?php
                         foreach ($data as $msg) { ?>
                             <div class="row-msg msg-item" id="msg-id-<?php echo $msg->id ?>"
@@ -109,34 +109,35 @@ if (current_user_can('administrator')) {
                                      ENT_QUOTES, 'UTF-8') ?>">
                                 <div class="info-msg">
                                     <div class="avatar-msg">
-                                        <img src="https://www.gravatar.com/avatar/<?php wp_generate_password($msg->creator_id, false); ?>">
+                                        <?php echo get_avatar($msg->creator_id); ?>
                                     </div>
                                     <div class="header-msg">
                                         <div class="name-msg">
                                             <?php
                                             $sender = get_userdata($msg->creator_id);
-                                            echo $sender->user_login;
+                                            esc_html_e($sender->user_login);
                                             ?>
                                         </div>
                                         <div class="title-msg title-all-msg ">
-                                            <a id="show-message" class=" pointer"> <?php
-                                                echo $msg->title;
+                                            <a id="show-message" class=" pointer">
+                                                <?php
+                                                esc_html_e( $msg->title );
                                                 ?>
                                             </a>
                                         </div>
                                     </div>
 
                                 </div>
-                                <div class="description-msg"><?php echo $msg->description; ?></div>
+                                <div class="description-msg"><?php esc_html_e($msg->description) ; ?></div>
                                 <div class="time_btn_msg">
-                                    <?php echo ATL_Helper::time_elapsed_string($msg->time_create); ?>
+                                    <?php echo SATL_Helper::time_elapsed_string($msg->time_create); ?>
                                     <?php if ((int)$msg->user_id === $current_user_id): ?>
                                         <button class="btn_status btn_submit changeStatus"
                                                 data-user-id="<?php echo $msg->user_id ?>"
                                                 data-msg-id="<?php echo $msg->id ?>"
                                                 data-status="done"
                                                 aria-hidden="true">
-                                            <?php _e('Done', 'atl'); ?>
+                                            <?php _e('Done', 'satl'); ?>
                                         </button>
                                     <?php endif; ?>
                                 </div>
@@ -147,7 +148,7 @@ if (current_user_can('administrator')) {
                 <div class="tab-pane " id="tab-hide">
                     <div>
                         <span class="back-tab">
-                            <?php _e('Back', 'atl'); ?></span>
+                            <?php _e('Back', 'satl'); ?></span>
                         <header class="header-show-msg">
                             <div class="row-msg">
                                 <div class="info-msg">
@@ -172,7 +173,7 @@ if (current_user_can('administrator')) {
                                     <button class="btn_status btn_submit changeStatus" id="btn_submit"
                                             data-status="done"
                                     >
-                                        <?php _e('Done', 'atl'); ?>
+                                        <?php _e('Done', 'satl'); ?>
                                     </button>
                                 </div>
                             </div>
@@ -189,4 +190,4 @@ if (current_user_can('administrator')) {
         </div>
     </div>
 </div>
-<input type="hidden" id="atl-get-uid" value="<?php echo $current_user_id ?>">
+<input type="hidden" id="satl-get-uid" value="<?php echo $current_user_id ?>">

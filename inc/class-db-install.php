@@ -1,8 +1,8 @@
 <?php
 
 
-if (!class_exists('ATL_DB')) {
-    class ATL_DB
+if (!class_exists('SATL_DB')) {
+    class SATL_DB
     {
         protected static $instance;
 
@@ -21,7 +21,7 @@ if (!class_exists('ATL_DB')) {
         /**
          * Returns single instance of the class
          *
-         * @return ATL_DB
+         * @return SATL_DB
          * @since 1.0.0
          */
         public static function get_instance()
@@ -51,7 +51,7 @@ if (!class_exists('ATL_DB')) {
             $wpdb->atl_table_admin_message = $this->_table_admin_message;
 
 
-            define('ATL_ADMIN_MESSAGE_TABLE', $this->_table_admin_message);
+            define('SATL_ADMIN_MESSAGE_TABLE', $this->_table_admin_message);
 
 
         }
@@ -86,7 +86,7 @@ if (!class_exists('ATL_DB')) {
          */
         public function register_current_version()
         {
-            ATL_Helper::update_or_create_option('atl_db_version', ATL_DB_VERSION);
+            SATL_Helper::update_or_create_option('atl_db_version', SATL_DB_VERSION);
         }
 
         /**
@@ -151,10 +151,10 @@ if (!class_exists('ATL_DB')) {
 
 /**
  *
- * @return ATL_DB
+ * @return SATL_DB
  * @since 1.0.0
  */
-function ATL_DB()
+function SATL_DB()
 {
-    return ATL_DB::get_instance();
+    return SATL_DB::get_instance();
 }

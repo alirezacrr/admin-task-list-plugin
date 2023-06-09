@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Simple Admin Task\n"
-"POT-Creation-Date: 2023-04-19 18:56+0330\n"
-"PO-Revision-Date: 2023-04-19 18:56+0330\n"
+"POT-Creation-Date: 2023-04-19 19:27+0330\n"
+"PO-Revision-Date: 2023-04-19 19:28+0330\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fa_IR\n"
@@ -21,7 +21,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: inc/admin-task-list.php:63 inc/admin-task-list.php:64
+#: inc/admin-task-list.php:64 inc/admin-task-list.php:65
 msgid "Task List"
 msgstr "لیست وظایف"
 
@@ -183,12 +183,20 @@ msgid "Back"
 msgstr "بازگشت"
 
 #. Plugin Name of the plugin/theme
-msgid "Simple Admin Task Plugin"
-msgstr "افزونه لیست وظایف ساده"
+msgid "Simple Task List"
+msgstr "لیست وظایف (ساده)"
+
+#. Plugin URI of the plugin/theme
+msgid "https://alirezacrr.ir/wp-plugin/satl"
+msgstr ""
 
 #. Description of the plugin/theme
-msgid "Task manager for administrator"
-msgstr "مدیریت وظایف برای ادمین ها"
+msgid ""
+"This plugin is a simple version for creating tasks and managing tasks for "
+"admins and authors of your site"
+msgstr ""
+"این افزونه یک نسخه ساده برای ایجاد وظایف و مدیریت وظایف برای مدیران و "
+"نویسندگان سایت شما است"
 
 #. Author of the plugin/theme
 msgid "Alireza Jafari"
@@ -197,6 +205,12 @@ msgstr ""
 #. Author URI of the plugin/theme
 msgid "https://alirezacrr.ir"
 msgstr ""
+
+#~ msgid "Simple Admin Task Plugin"
+#~ msgstr "افزونه لیست وظایف ساده"
+
+#~ msgid "Task manager for administrator"
+#~ msgstr "مدیریت وظایف برای ادمین ها"
 
 #~ msgid "Admin Task List"
 #~ msgstr "لیست وظیفه مدیر"

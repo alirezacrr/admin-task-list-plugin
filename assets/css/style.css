@@ -1,14 +1,14 @@
-.atl-font,
-.atl-font h1,
-.atl-font h2,
-.atl-font h3,
-.atl-font h4,
-.atl-font h5 {
+.satl-font,
+.satl-font h1,
+.satl-font h2,
+.satl-font h3,
+.satl-font h4,
+.satl-font h5 {
     font-family: cursive !important;
 }
 
-.dashboard_page_atl-task-list .notice:not(.atl-notice),
-.toplevel_page_atl-task-list .notice:not(.atl-notice) {
+.dashboard_page_atl-task-list .notice:not(.satl-notice),
+.toplevel_page_atl-task-list .notice:not(.satl-notice) {
     display: none !important;
 }
 
@@ -672,7 +672,7 @@ span.back-tab {
     content: attr(data-empty);
 }
 
-.atl-page-content {
+.satl-page-content {
     padding: 20px;
 }
 
@@ -721,7 +721,7 @@ table.table-tasks tbody tr:nth-child(even) {
     background-color: #e9ecef;
 }
 
-.footer-atl-table {
+.footer-satl-table {
     position: relative;
     padding: 20px 0;
 }
@@ -730,7 +730,7 @@ table.table-tasks tbody tr:nth-child(even) {
     display: flex;
 }
 
-.footer-atl-table .total-task-count {
+.footer-satl-table .total-task-count {
     position: absolute;
     right: 0;
     bottom: 30px;
@@ -789,7 +789,7 @@ table.table-tasks tbody tr:nth-child(even) {
     cursor: pointer;
 }
 
-.atl-page-content .headline {
+.satl-page-content .headline {
     margin-bottom: 40px;
 }
 

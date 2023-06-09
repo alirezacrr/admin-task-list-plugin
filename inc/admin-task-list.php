@@ -3,11 +3,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-if (!class_exists('ATL')) {
-    class ATL
+if (!class_exists('SATL')) {
+    class SATL
     {
         /**
-         * @var ATL
+         * @var SATL
          */
         private static $_instance;
 
@@ -22,8 +22,8 @@ if (!class_exists('ATL')) {
 
         public function includes()
         {
-            include_once ATL_ABSPATH . 'inc/class-db-install.php';
-            include_once ATL_ABSPATH . 'inc/helper.php';
+            include_once SATL_ABSPATH . 'inc/class-db-install.php';
+            include_once SATL_ABSPATH . 'inc/helper.php';
 
         }
 
@@ -32,7 +32,7 @@ if (!class_exists('ATL')) {
          *
          * Ensures only one instance of is loaded or can be loaded.
          *
-         * @return ATL - Main instance.
+         * @return SATL - Main instance.
          * @static
          */
         public static function instance()
@@ -52,19 +52,20 @@ if (!class_exists('ATL')) {
             add_action('wp_ajax_save', array($this, 'save_msg'));
             add_action('wp_ajax_table', array($this, 'get_task_data'));
             add_action('admin_menu', array($this, '_action_admin_menu'));
-            Load_Theme_TextDomain('atl', ATL_ABSPATH . 'languages');
+            Load_Theme_TextDomain('satl', SATL_ABSPATH . 'languages');
 
         }
+
         /**
          * @internal
          */
         public function _action_admin_menu()
         {
             add_menu_page(
-                __('Task List', 'atl'),
-                __('Task List', 'atl'),
+                __('Task List', 'satl'),
+                __('Task List', 'satl'),
                 'manage_options',
-                'atl-task-list',
+                'satl-task-list',
                 array($this, 'sub_menu'),
                 'dashicons-list-view'
             );
@@ -73,84 +74,83 @@ if (!class_exists('ATL')) {
         public function sub_menu()
         {
 
-                global $wpdb;
-                $admin_message = $wpdb->prefix . 'atl_admin_message';
-                //
-                if (isset($_GET['user_id'])) {
-                    $userID = $_GET['user_id'];
-                }
-                $limit = 10;
-                $page = isset($_GET['paged']) ? (int)$_GET['paged'] : 1;
-                $offset = ($page - 1) * $limit;
+            global $wpdb;
+            $admin_message = $wpdb->prefix . 'atl_admin_message';
 
-                $querystr = "select *  from $admin_message LIMIT $offset , $limit";
-                $all_messages = $wpdb->get_results($querystr);
-                $total = $wpdb->get_var("select count(*) as total from $admin_message");
-                $num_of_pages = (int)ceil($total / $limit);
-                $next_page = $page !== $num_of_pages ? $page + 1 : $page;
-                $prev_page = $page !== 1 ? $page - 1 : $page;
-                ?>
-                <div class="atl-page-content atl-font">
-                    <h1 class="headline">- <?php _e('All Tasks', 'atl'); ?></h1>
-                    <?php if (!$all_messages): ?>
-                        <div class="task-empty"><?php _e('There is no task !', 'atl') ?></div>
-                        <input type="button" id="create-task" value="<?php _e('create new task', 'atl') ?>">
-                    <?php else:
-                        ?>
-                        <table class="table-tasks">
-                            <thead>
+            $limit = 10;
+            $page = isset($_GET['paged']) ? (int)$_GET['paged'] : 1;
+            $offset = ($page - 1) * $limit;
+            $all_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM $admin_message LIMIT %d , %d", $offset, $limit));
+            $total = $wpdb->get_var("select count(*) as total from $admin_message");
+            $num_of_pages = (int)ceil($total / $limit);
+            $next_page = $page !== $num_of_pages ? $page + 1 : $page;
+            $prev_page = $page !== 1 ? $page - 1 : $page;
+            ?>
+            <div class="satl-page-content satl-font">
+                <h1 class="headline">- <?php _e('All Tasks', 'satl'); ?></h1>
+                <?php if (!$all_messages): ?>
+                    <div class="task-empty"><?php _e('There is no task !', 'satl') ?></div>
+                    <input type="button" id="create-task" value="<?php _e('create new task', 'satl') ?>">
+                <?php else:
+                    ?>
+                    <table class="table-tasks">
+                        <thead>
+                        <tr>
+                            <th scope="col"><?php _e('Title', 'satl'); ?></th>
+                            <th scope="col"><?php _e('Creator', 'satl'); ?></th>
+                            <th scope="col"><?php _e('Receiver', 'satl'); ?></th>
+                            <th scope="col"><?php _e('Status', 'satl'); ?></th>
+                            <th scope="col"><?php _e('Action', 'satl'); ?></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <?php foreach ($all_messages as $item) { ?>
                             <tr>
-                                <th scope="col"><?php _e('Title', 'atl'); ?></th>
-                                <th scope="col"><?php _e('Creator', 'atl'); ?></th>
-                                <th scope="col"><?php _e('Receiver', 'atl'); ?></th>
-                                <th scope="col"><?php _e('Status', 'atl'); ?></th>
-                                <th scope="col"><?php _e('Action', 'atl'); ?></th>
+                                <td data-label="<?php esc_attr_e('Title', 'satl'); ?>"><?php esc_html_e($item->title) ?></td>
+                                <td data-label="<?php esc_attr_e('Creator', 'satl'); ?>"><?php
+                                    $creator = get_userdata($item->creator_id);
+                                    esc_html_e($creator->user_login) ?></td>
+                                <td data-label="<?php esc_attr_e('Receiver', 'satl'); ?>"><?php
+                                    if ($item->user_id == 0) {
+                                        _e('ALL', 'satl');
+                                    } else {
+                                        $user = get_userdata($item->user_id);
+                                        esc_html_e($user->user_login);
+                                    }
+                                    ?>
+                                </td>
+                                <td data-label="<?php esc_attr_e('Status', 'satl'); ?>">
+                                    <?php esc_html_e(SATL_Helper::get_status_label($item->status)) ?>
+                                </td>
+                                <td data-label="<?php esc_attr_e('Action', 'satl'); ?>">
+                                    <button class="view-msg"
+                                            data-msg-detailed="<?php echo htmlspecialchars(json_encode($item),
+                                                ENT_QUOTES, 'UTF-8') ?>"><?php _e('View', 'satl'); ?></button>
+                                </td>
                             </tr>
-                            </thead>
-                            <tbody>
-
-                            <?php foreach ($all_messages as $item) { ?>
-                                <tr>
-                                    <td data-label="<?php _e('Title', 'atl'); ?>"><?php echo $item->title ?></td>
-                                    <td data-label="<?php _e('Creator', 'atl'); ?>"><?php
-                                        $creator = get_userdata($item->creator_id);
-                                        echo $creator->user_login ?></td>
-                                    <td data-label="<?php _e('Receiver', 'atl'); ?>"><?php
-                                        if ($item->user_id == 0) {
-                                            echo __('ALL', 'atl');
-                                        } else {
-                                            $user = get_userdata($item->user_id);
-                                            echo $user->user_login;
-                                        }
-                                        ?>
-                                    </td>
-                                    <td data-label="<?php _e('Status', 'atl'); ?>">
-                                        <?php echo ATL_Helper::get_status_label($item->status) ?>
-                                    </td>
-                                    <td data-label="<?php _e('Action', 'atl'); ?>">
-                                        <button class="view-msg"
-                                                data-msg-detailed="<?php echo htmlspecialchars(json_encode($item),
-                                                    ENT_QUOTES, 'UTF-8') ?>"><?php _e('View', 'atl'); ?></button>
-                                    </td>
-                                </tr>
-                            <?php } ?>
-                            </tbody>
-                        </table>
-                        <div class="footer-atl-table">
-                            <div class="pagination-list">
-                                <a href="<?php echo add_query_arg('paged', $prev_page) ?>"
-                                   class="btn <?php echo $page === 1 ? 'disabled' : '' ?>" id="btn_prev"><?php _e('Prev','atl'); ?></a>
-                                <a href="<?php echo add_query_arg('paged', $next_page) ?>"
-                                   class="btn <?php echo $page === $num_of_pages ? 'disabled' : '' ?>"
-                                   id="btn_next"><?php _e('Next','atl'); ?></a>
-                            </div>
-                            <span class="total-task-count"><?php echo sprintf(__('Total : %s'), $total) ?></span>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                    <div class="footer-satl-table">
+                        <div class="pagination-list">
+                            <a href="<?php echo esc_url(add_query_arg('paged', $prev_page)) ?>"
+                               class="btn <?php echo $page === 1 ? 'disabled' : '' ?>" id="btn_prev">
+                                <?php _e('Prev', 'satl'); ?>
+                            </a>
+                            <a href="<?php echo esc_url(add_query_arg('paged', $next_page)) ?>"
+                               class="btn <?php echo $page === $num_of_pages ? 'disabled' : '' ?>"
+                               id="btn_next">
+                                <?php _e('Next', 'satl'); ?>
+                            </a>
                         </div>
-                    <?php endif; ?>
+                        <span class="total-task-count"><?php echo sprintf(__('Total : %s'), $total) ?></span>
+                    </div>
+                <?php endif; ?>
 
-                </div>
+            </div>
 
-                <?php
+            <?php
 
         }
 
@@ -162,6 +162,11 @@ if (!class_exists('ATL')) {
                 wp_die();
             }
             $user_id = $_POST['user_id'];
+            $title = sanitize_title($_POST['title']);
+            $desc = sanitize_textarea_field($_POST['description']);
+            if (empty($user_id) || empty($title)) {
+                wp_send_json_error(false);
+            }
             global $wpdb;
             $msg_table = $wpdb->prefix . 'atl_admin_message';
             $res = false;
@@ -171,8 +176,8 @@ if (!class_exists('ATL')) {
                     array(
                         'time_create' => current_time('mysql'),
                         'creator_id' => get_current_user_id(),
-                        'title' => $_POST['title'],
-                        'description' => $_POST['description'],
+                        'title' => $title,
+                        'description' => $desc,
                         'user_id' => $user_id,
                     )
                 );
@@ -200,7 +205,7 @@ if (!class_exists('ATL')) {
 
         public function modals()
         {
-            return include_once ATL_ABSPATH . 'templates/modal.php';
+            return include_once SATL_ABSPATH . 'templates/modal.php';
         }
 
         public function install()
@@ -209,12 +214,12 @@ if (!class_exists('ATL')) {
                 return;
             }
             $stored_db_version = get_option('atl_db_version');
-            if (!$stored_db_version || !ATL_DB()->is_installed()) {
+            if (!$stored_db_version || !SATL_DB()->is_installed()) {
                 // fresh installation.
-                ATL_DB()->init();
-            } elseif (version_compare($stored_db_version, ATL_DB_VERSION, '<')) {
+                SATL_DB()->init();
+            } elseif (version_compare($stored_db_version, SATL_DB_VERSION, '<')) {
                 // update database.
-                ATL_DB()->update($stored_db_version);
+                SATL_DB()->update($stored_db_version);
             }
         }
 
@@ -223,66 +228,66 @@ if (!class_exists('ATL')) {
             wp_enqueue_style('atl_font_awesome_css',
                 plugins_url('../assets/css/font-awesome.min.css', __FILE__),
                 array(),
-                ATL_VERSION
+                SATL_VERSION
             );
             wp_enqueue_style('atl_font_iranyekan_css',
                 plugins_url('../assets/fonts/iranyekan/font-iranyekan.css', __FILE__),
                 array(),
-                ATL_VERSION
+                SATL_VERSION
             );
             wp_enqueue_style('atl_select2-bootstrap4.css',
                 plugins_url('../assets/css/select2-bootstrap4.css', __FILE__),
                 array(),
-                ATL_VERSION
+                SATL_VERSION
             );
             wp_enqueue_style('atl_select2_css',
                 plugins_url('../assets/css/select2.min.css', __FILE__),
                 array(),
-                ATL_VERSION
+                SATL_VERSION
             );
             wp_enqueue_style('atl_admin_css',
                 plugins_url('../assets/css/style.css', __FILE__),
                 array(),
-                ATL_VERSION
+                SATL_VERSION
             );
             if (is_rtl()) {
                 wp_enqueue_style('atl_admin_css_rtl',
                     plugins_url('../assets/css/rtl.css', __FILE__),
                     array(),
-                    ATL_VERSION
+                    SATL_VERSION
                 );
             }
             wp_enqueue_script('atl_md5_js',
                 plugins_url('../assets/js/md5.min.js', __FILE__),
                 array('jquery'),
-                ATL_VERSION,
+                SATL_VERSION,
                 true
             );
             wp_enqueue_script('atl_select2_js',
                 plugins_url('../assets/js/select2.min.js', __FILE__),
                 array('jquery'),
-                ATL_VERSION,
+                SATL_VERSION,
                 true
             );
             wp_enqueue_script('atl_functions_js',
                 plugins_url('../assets/js/functions.js', __FILE__),
                 array('jquery'),
-                ATL_VERSION,
+                SATL_VERSION,
                 true
             );
             wp_localize_script('atl_functions_js', 'ajax_var', array(
                 'url' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('ajax-nonce'),
                 'l10n' => array(
-                    'y' => __('year', 'atl'),
-                    'm' => __('month', 'atl'),
-                    'w' => __('week', 'atl'),
-                    'd' => __('day', 'atl'),
-                    'h' => __('hours', 'atl'),
-                    'i' => __('min', 'atl'),
-                    's' => __('sec', 'atl'),
-                    'ago' => __('ago', 'atl'),
-                    'required_user_and_title' => __('It is required to fill in the title and select the user', 'atl'),
+                    'y' => __('year', 'satl'),
+                    'm' => __('month', 'satl'),
+                    'w' => __('week', 'satl'),
+                    'd' => __('day', 'satl'),
+                    'h' => __('hours', 'satl'),
+                    'i' => __('min', 'satl'),
+                    's' => __('sec', 'satl'),
+                    'ago' => __('ago', 'satl'),
+                    'required_user_and_title' => __('It is required to fill in the title and select the user', 'satl'),
                 )
             ));
         }

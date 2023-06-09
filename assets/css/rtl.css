@@ -1,12 +1,12 @@
-.atl-font ,
-.atl-font h1,
-.atl-font h2,
-.atl-font h3,
-.atl-font h4,
-.atl-font h5{
+.satl-font ,
+.satl-font h1,
+.satl-font h2,
+.satl-font h3,
+.satl-font h4,
+.satl-font h5{
     font-family: iranyekan !important;
 }
-.footer-atl-table .total-task-count {
+.footer-satl-table .total-task-count {
     right: auto;
     left: 0;
 }

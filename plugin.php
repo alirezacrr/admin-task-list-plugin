@@ -6,15 +6,15 @@
  * @since
  *
  * @wordpress-plugin
- * Plugin Name:       Simple Admin Task Plugin
- * Plugin URI:
- * Description:       Task manager for administrator
+ * Plugin Name:       Simple Admin Task List
+ * Plugin URI:        https://github.com/alirezacrr/admin-task-list-plugin
+ * Description:       This plugin is a simple version for creating tasks and managing tasks for admins and authors of your site
  * Version:           1.0.0
  * Author:            Alireza Jafari
  * Author URI:        https://alirezacrr.ir
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       atl
+ * Text Domain:       satl
  * Domain Path:       /languages
  */
 
@@ -25,20 +25,20 @@ if (!defined('WPINC')) {
     die;
 }
 
-if (!defined('ATL_FILE')) {
-    define('ATL_FILE', __FILE__);
+if (!defined('SATL_FILE')) {
+    define('SATL_FILE', __FILE__);
 }
 $plugin_version = '1.0.0';
 $db_version = '1.0.0';
 /**
- * ATL Version Define
+ * SATL Version Define
  */
-define('ATL_VERSION', $plugin_version);
-define('ATL_DB_VERSION', $plugin_version);
-define('ATL_ABSPATH', dirname(ATL_FILE) . '/');
+define('SATL_VERSION', $plugin_version);
+define('SATL_DB_VERSION', $plugin_version);
+define('SATL_ABSPATH', dirname(SATL_FILE) . '/');
 
-if (!class_exists('ATL', false)) {
-    include_once dirname(ATL_FILE) . '/inc/admin-task-list.php';
-    ATL::instance();
+if (!class_exists('SATL', false)) {
+    include_once dirname(SATL_FILE) . '/inc/admin-task-list.php';
+    SATL::instance();
 }
 

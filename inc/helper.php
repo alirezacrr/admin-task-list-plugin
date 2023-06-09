@@ -2,7 +2,7 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-class ATL_Helper{
+class SATL_Helper{
     static function update_or_create_option($option, $value)
     {
         if (get_option($option)) {
@@ -21,13 +21,13 @@ class ATL_Helper{
         $diff->d -= $diff->w * 7;
 
         $string = array(
-            'y' => __('year','atl'),
-            'm' => __('month','atl'),
-            'w' => __('week','atl'),
-            'd' => __('day','atl'),
-            'h' => __('hours','atl'),
-            'i' => __('min','atl'),
-            's' => __('sec','atl'),
+            'y' => __('year','satl'),
+            'm' => __('month','satl'),
+            'w' => __('week','satl'),
+            'd' => __('day','satl'),
+            'h' => __('hours','satl'),
+            'i' => __('min','satl'),
+            's' => __('sec','satl'),
         );
         foreach ($string as $k => &$v) {
             if ($diff->$k) {
@@ -38,16 +38,16 @@ class ATL_Helper{
         }
 
         if (!$full) $string = array_slice($string, 0, 1);
-        return $string ? implode(', ', $string) . __(' ago ','atl') :__('just now','atl') ;
+        return $string ? implode(', ', $string) . __(' ago ','satl') :__('just now','satl') ;
     }
     static function get_status_label($status){
         switch ($status){
             case 'pending':
-                return __('Pending','atl');
+                return __('Pending','satl');
                 case 'done':
-                return __('Done','atl');
+                return __('Done','satl');
             default:
-                return __('Unknown','atl');
+                return __('Unknown','satl');
         }
     }
 

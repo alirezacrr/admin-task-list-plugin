@@ -39,8 +39,7 @@ jQuery(document).ready(function ($) {
                     window.location.reload()
                 } ,
                 error: function () {
-                    swalErrorConnection();
-                    remove_loading_by_id(id_loading_elm);
+                    alert('Error')
                 }
             });
         }
@@ -115,7 +114,7 @@ jQuery(document).ready(function ($) {
         closeButton.addEventListener("click", toggleModal);
         window.addEventListener("click", windowOnClick);
 
-        $('.atl-select').each(function () {
+        $('.satl-select').each(function () {
             $(this).select2({
                 theme: 'bootstrap4',
                 width: 'style',
@@ -175,7 +174,7 @@ jQuery(document).ready(function ($) {
         function show_detail_modal(e){
             $('#tab-hide').addClass(activeClass);
             $('#tab-hide').show();
-            let uid = $('#atl-get-uid').val();
+            let uid = $('#satl-get-uid').val();
             let msgData = $(e).data('msg-detailed');
             let email = msgData.user_email;
             let gravatar = $('<img>').attr({src: 'https://www.gravatar.com/avatar/' + md5(email)});
