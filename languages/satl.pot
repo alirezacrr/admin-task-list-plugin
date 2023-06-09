@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"Project-Id-Version: Simple Admin Task Plugin\n"
-"POT-Creation-Date: 2023-04-19 18:14+0330\n"
-"PO-Revision-Date: 2023-04-19 18:13+0330\n"
+"Project-Id-Version: Simple Admin Task List\n"
+"POT-Creation-Date: 2023-06-09 18:13+0330\n"
+"PO-Revision-Date: 2023-06-09 18:12+0330\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,55 +21,55 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: inc/admin-task-list.php:63 inc/admin-task-list.php:64
-msgid "Admin Task List"
+#: inc/admin-task-list.php:65 inc/admin-task-list.php:66
+msgid "Task List"
 msgstr ""
 
-#: inc/admin-task-list.php:94
+#: inc/admin-task-list.php:90
 msgid "All Tasks"
 msgstr ""
 
-#: inc/admin-task-list.php:96
+#: inc/admin-task-list.php:92
 msgid "There is no task !"
 msgstr ""
 
-#: inc/admin-task-list.php:97
+#: inc/admin-task-list.php:93
 msgid "create new task"
 msgstr ""
 
-#: inc/admin-task-list.php:103 inc/admin-task-list.php:114
+#: inc/admin-task-list.php:99 inc/admin-task-list.php:110
 msgid "Title"
 msgstr ""
 
-#: inc/admin-task-list.php:104 inc/admin-task-list.php:115
+#: inc/admin-task-list.php:100 inc/admin-task-list.php:111
 msgid "Creator"
 msgstr ""
 
-#: inc/admin-task-list.php:105 inc/admin-task-list.php:118
+#: inc/admin-task-list.php:101 inc/admin-task-list.php:114
 msgid "Receiver"
 msgstr ""
 
-#: inc/admin-task-list.php:106 inc/admin-task-list.php:127
+#: inc/admin-task-list.php:102 inc/admin-task-list.php:123
 msgid "Status"
 msgstr ""
 
-#: inc/admin-task-list.php:107 inc/admin-task-list.php:130
+#: inc/admin-task-list.php:103 inc/admin-task-list.php:126
 msgid "Action"
 msgstr ""
 
-#: inc/admin-task-list.php:120
+#: inc/admin-task-list.php:116
 msgid "ALL"
 msgstr ""
 
-#: inc/admin-task-list.php:133
+#: inc/admin-task-list.php:129
 msgid "View"
 msgstr ""
 
-#: inc/admin-task-list.php:142
+#: inc/admin-task-list.php:139
 msgid "Prev"
 msgstr ""
 
-#: inc/admin-task-list.php:145
+#: inc/admin-task-list.php:144
 msgid "Next"
 msgstr ""
 
@@ -78,39 +78,39 @@ msgstr ""
 msgid "Total : %s"
 msgstr ""
 
-#: inc/admin-task-list.php:277 inc/helper.php:24
+#: inc/admin-task-list.php:282 inc/helper.php:24
 msgid "year"
 msgstr ""
 
-#: inc/admin-task-list.php:278 inc/helper.php:25
+#: inc/admin-task-list.php:283 inc/helper.php:25
 msgid "month"
 msgstr ""
 
-#: inc/admin-task-list.php:279 inc/helper.php:26
+#: inc/admin-task-list.php:284 inc/helper.php:26
 msgid "week"
 msgstr ""
 
-#: inc/admin-task-list.php:280 inc/helper.php:27
+#: inc/admin-task-list.php:285 inc/helper.php:27
 msgid "day"
 msgstr ""
 
-#: inc/admin-task-list.php:281 inc/helper.php:28
+#: inc/admin-task-list.php:286 inc/helper.php:28
 msgid "hours"
 msgstr ""
 
-#: inc/admin-task-list.php:282 inc/helper.php:29
+#: inc/admin-task-list.php:287 inc/helper.php:29
 msgid "min"
 msgstr ""
 
-#: inc/admin-task-list.php:283 inc/helper.php:30
+#: inc/admin-task-list.php:288 inc/helper.php:30
 msgid "sec"
 msgstr ""
 
-#: inc/admin-task-list.php:284
+#: inc/admin-task-list.php:289
 msgid "ago"
 msgstr ""
 
-#: inc/admin-task-list.php:285
+#: inc/admin-task-list.php:290
 msgid "It is required to fill in the title and select the user"
 msgstr ""
 
@@ -126,7 +126,7 @@ msgstr ""
 msgid "Pending"
 msgstr ""
 
-#: inc/helper.php:48 templates/modal.php:139 templates/modal.php:175
+#: inc/helper.php:48 templates/modal.php:140 templates/modal.php:176
 msgid "Done"
 msgstr ""
 
@@ -178,16 +178,22 @@ msgstr ""
 msgid "You have no task to perform"
 msgstr ""
 
-#: templates/modal.php:150
+#: templates/modal.php:151
 msgid "Back"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-msgid "Simple Admin Task Plugin"
+msgid "Simple Admin Task List"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://github.com/alirezacrr/admin-task-list-plugin"
 msgstr ""
 
 #. Description of the plugin/theme
-msgid "Task manager for administrator"
+msgid ""
+"This plugin is a simple version for creating tasks and managing tasks for "
+"admins and authors of your site"
 msgstr ""
 
 #. Author of the plugin/theme
