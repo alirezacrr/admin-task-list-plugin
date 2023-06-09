@@ -80,7 +80,7 @@ if (!class_exists('SATL')) {
             $limit = 10;
             $page = isset($_GET['paged']) ? (int)$_GET['paged'] : 1;
             $offset = ($page - 1) * $limit;
-            $all_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM $admin_message LIMIT %d , %d", $offset, $limit));
+            $all_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM $admin_message ORDER BY time_create DESC LIMIT %d , %d", $offset, $limit));
             $total = $wpdb->get_var("select count(*) as total from $admin_message");
             $num_of_pages = (int)ceil($total / $limit);
             $next_page = $page !== $num_of_pages ? $page + 1 : $page;

@@ -62,9 +62,10 @@ jQuery(document).ready(function ($) {
             },
             url: ajax_var.url,
             success: function (resp) {
-                if (resp && status === "done") {
-                    $("#msg-id-" + msg_id).hide();
-                }
+                // if (resp && status === "done") {
+                //     $("#msg-id-" + msg_id).hide();
+                // }
+                window.location.reload()
             }
 
         });
@@ -184,11 +185,14 @@ jQuery(document).ready(function ($) {
             $('#description-msg').text(msgData.description);
             $('#time-msg').text(ago(new Date(msgData.time_create)));
             if (uid === msgData.user_id){
-                $('#btn_submit').attr({
-                    'data-user-id': msgData.user_id,
-                    'data-msg-id': msgData.msg_id,
-                    'data-status': 'done'
-                });
+                if (msgData.status !== "done"){
+                    $('#btn_submit').show()
+                    $('#btn_submit').attr({
+                        'data-user-id': msgData.user_id,
+                        'data-msg-id': msgData.id,
+                        'data-status': 'done'
+                    });
+                }
             }else {
                 $('#btn_submit').hide()
             }
