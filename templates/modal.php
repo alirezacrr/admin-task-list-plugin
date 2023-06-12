@@ -7,14 +7,14 @@ $users = $wpdb->prefix . "users";
 //
 $current_user_id = get_current_user_id();
 $data = $wpdb->get_results(
-    $wpdb->prepare("SELECT * FROM $admin_message WHERE user_id = %d AND status != %s ", $current_user_id, "done")
+    $wpdb->prepare("SELECT * FROM {$admin_message} WHERE user_id = %d AND status != %s ", $current_user_id, "done")
 );
-$chack_msg = !empty($data);
+$check_msg = !empty($data);
 $toggle_class = '';
 $toggle_tab = 'task-list';
 if (current_user_can('administrator')) {
-    $toggle_class = $chack_msg ? 'have-msg' : '';
-    $toggle_tab = $chack_msg ? 'task-list' : 'new';
+    $toggle_class = $check_msg ? 'have-msg' : '';
+    $toggle_tab = $check_msg ? 'task-list' : 'new';
 }
 
 ?>
@@ -24,7 +24,7 @@ if (current_user_can('administrator')) {
     <a class="pointer topbutton openModal <?php esc_attr_e($toggle_class); ?>"
        data-tab="<?php esc_html_e($toggle_tab) ?>">
         <img class="btn_sticky"
-             src="<?php echo $chack_msg ? plugin_dir_url(__FILE__) . '../assets/img/icons/haveMsg.png' : plugin_dir_url(__FILE__) . '../assets/img/icons/noMsg.png'; ?>"
+             src="<?php echo $check_msg ? plugin_dir_url(__FILE__) . '../assets/img/icons/haveMsg.png' : plugin_dir_url(__FILE__) . '../assets/img/icons/noMsg.png'; ?>"
              alt="modal">
     </a>
 

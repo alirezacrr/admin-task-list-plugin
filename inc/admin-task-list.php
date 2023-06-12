@@ -194,10 +194,14 @@ if (!class_exists('SATL')) {
                 wp_die();
             }
             global $wpdb;
-            if (!isset($_POST['status']) || !isset($_POST['msg_id'])){
+            if (!empty($_POST['status']) || !empty($_POST['msg_id'])){
                 wp_send_json_error(false);
             }
-            $status = (int)$_POST['status'];
+
+            $status = (string)$_POST['status'];
+            if (!in_array($status,$this->allowed_status_msg())){
+                wp_send_json_error(false);
+            }
             $msgId = (int)$_POST['msg_id'];
             $admin_message = $wpdb->prefix . 'atl_admin_message';
             $res = $wpdb->update($admin_message, array('time_edit' => current_time('mysql'), 'status' => $status), array('id' => $msgId));
@@ -308,6 +312,11 @@ if (!class_exists('SATL')) {
             if (!defined($name)) {
                 define($name, $value);
             }
+        }
+        private function allowed_status_msg(){
+            return [
+                    'pending','done'
+            ];
         }
     }
 }
