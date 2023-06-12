@@ -80,7 +80,9 @@ if (!class_exists('SATL')) {
             $limit = 10;
             $page = isset($_GET['paged']) ? (int)$_GET['paged'] : 1;
             $offset = ($page - 1) * $limit;
-            $all_messages = $wpdb->get_results($wpdb->prepare("SELECT * FROM $admin_message ORDER BY time_create DESC LIMIT %d , %d", $offset, $limit));
+            $all_messages = $wpdb->get_results(
+                    $wpdb->prepare("SELECT * FROM {$admin_message} ORDER BY time_create DESC LIMIT %d , %d", $offset, $limit)
+            );
             $total = $wpdb->get_var("select count(*) as total from $admin_message");
             $num_of_pages = (int)ceil($total / $limit);
             $next_page = $page !== $num_of_pages ? $page + 1 : $page;
@@ -161,7 +163,7 @@ if (!class_exists('SATL')) {
                 wp_send_json_error('Invalid security token sent.');
                 wp_die();
             }
-            $user_id = $_POST['user_id'];
+            $user_id = (int)$_POST['user_id'] ;
             $title = sanitize_title($_POST['title']);
             $desc = sanitize_textarea_field($_POST['description']);
             if (empty($user_id) || empty($title)) {
@@ -192,15 +194,18 @@ if (!class_exists('SATL')) {
                 wp_die();
             }
             global $wpdb;
-            $status = $_POST['status'];
-            $msgId = $_POST['msg_id'];
-            $admin_message = $wpdb->prefix . 'atl_admin_message';
-            $res = $wpdb->update($admin_message, array('time_edit' => current_time('mysql'), 'status' => $status), array('id' => $msgId));
-            if ($res) {
-                wp_send_json(true);
-            } else {
+            if (!isset($_POST['status']) || !isset($_POST['msg_id'])){
                 wp_send_json_error(false);
             }
+            $status = (int)$_POST['status'];
+            $msgId = (int)$_POST['msg_id'];
+            $admin_message = $wpdb->prefix . 'atl_admin_message';
+            $res = $wpdb->update($admin_message, array('time_edit' => current_time('mysql'), 'status' => $status), array('id' => $msgId));
+            if (!$res) {
+                wp_send_json_error(false);
+            }
+            wp_send_json(true);
+
         }
 
         public function modals()
