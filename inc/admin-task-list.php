@@ -194,7 +194,7 @@ if (!class_exists('SATL')) {
                 wp_die();
             }
             global $wpdb;
-            if (!empty($_POST['status']) || !empty($_POST['msg_id'])){
+            if (empty($_POST['status']) || empty($_POST['msg_id'])){
                 wp_send_json_error(false);
             }
 
