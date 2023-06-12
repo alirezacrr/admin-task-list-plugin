@@ -6,7 +6,7 @@ $users = $wpdb->prefix . "users";
 
 //
 $current_user_id = get_current_user_id();
-$data =  $wpdb->get_results(
+$data = $wpdb->get_results(
     $wpdb->prepare("SELECT * FROM $admin_message WHERE user_id = %d AND status != %s ", $current_user_id, "done")
 );
 $chack_msg = !empty($data);
@@ -21,8 +21,8 @@ if (current_user_can('administrator')) {
 
 <div class="have-modal">
 
-    <a class="pointer topbutton openModal <?php esc_attr_e($toggle_class);  ?>"
-       data-tab="<?php esc_html_e($toggle_tab)  ?>">
+    <a class="pointer topbutton openModal <?php esc_attr_e($toggle_class); ?>"
+       data-tab="<?php esc_html_e($toggle_tab) ?>">
         <img class="btn_sticky"
              src="<?php echo $chack_msg ? plugin_dir_url(__FILE__) . '../assets/img/icons/haveMsg.png' : plugin_dir_url(__FILE__) . '../assets/img/icons/noMsg.png'; ?>"
              alt="modal">
@@ -36,7 +36,7 @@ if (current_user_can('administrator')) {
 
             <ul class="nav nav-tabs">
                 <?php if (current_user_can('administrator')): ?>
-                <li class=""><a href="#new" data-toggle="new"><?php _e('Add New', 'satl'); ?></a></li>
+                    <li class=""><a href="#new" data-toggle="new"><?php _e('Add New', 'satl'); ?></a></li>
                 <?php endif; ?>
                 <li class=""><a href="#task-list" data-toggle="task-list"><?php _e('Your Tasks', 'satl'); ?></a></li>
             </ul>
@@ -110,7 +110,7 @@ if (current_user_can('administrator')) {
                                      ENT_QUOTES, 'UTF-8') ?>">
                                 <div class="info-msg">
                                     <div class="avatar-msg">
-                                        <?php esc_html_e(get_avatar($msg->creator_id)); ?>
+                                        <?php echo wp_kses(get_avatar($msg->creator_id), array('img' => array('alt' => array(), 'src' => array()))); ?>
                                     </div>
                                     <div class="header-msg">
                                         <div class="name-msg">
@@ -122,14 +122,14 @@ if (current_user_can('administrator')) {
                                         <div class="title-msg title-all-msg ">
                                             <a id="show-message" class=" pointer">
                                                 <?php
-                                                esc_html_e( $msg->title );
+                                                esc_html_e($msg->title);
                                                 ?>
                                             </a>
                                         </div>
                                     </div>
 
                                 </div>
-                                <div class="description-msg"><?php esc_html_e($msg->description) ; ?></div>
+                                <div class="description-msg"><?php esc_html_e($msg->description); ?></div>
                                 <div class="time_btn_msg">
                                     <?php echo SATL_Helper::time_elapsed_string($msg->time_create); ?>
                                     <?php if ((int)$msg->user_id === $current_user_id): ?>
