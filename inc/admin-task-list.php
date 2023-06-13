@@ -198,7 +198,7 @@ if (!class_exists('SATL')) {
                 wp_send_json_error(false);
             }
 
-            $status = (string)$_POST['status'];
+            $status = sanitize_text_field($_POST['status']);
             if (!in_array($status,$this->allowed_status_msg())){
                 wp_send_json_error(false);
             }

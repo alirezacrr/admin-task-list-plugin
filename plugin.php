@@ -9,7 +9,7 @@
  * Plugin Name:       Simple Admin Task List
  * Plugin URI:        https://github.com/alirezacrr/admin-task-list-plugin
  * Description:       This plugin is a simple version for creating tasks and managing tasks for admins and authors of your site
- * Version:           1.0.1
+ * Version:           1.1.0
  * Author:            Alireza Jafari
  * Author URI:        https://alirezacrr.ir
  * License:           GPL-2.0+

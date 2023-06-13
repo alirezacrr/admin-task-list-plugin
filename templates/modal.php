@@ -24,7 +24,7 @@ if (current_user_can('administrator')) {
     <a class="pointer topbutton openModal <?php esc_attr_e($toggle_class); ?>"
        data-tab="<?php esc_html_e($toggle_tab) ?>">
         <img class="btn_sticky"
-             src="<?php echo $check_msg ? plugin_dir_url(__FILE__) . '../assets/img/icons/haveMsg.png' : plugin_dir_url(__FILE__) . '../assets/img/icons/noMsg.png'; ?>"
+             src="<?php esc_attr_e($check_msg ? plugin_dir_url(__FILE__) . '../assets/img/icons/haveMsg.png' : plugin_dir_url(__FILE__) . '../assets/img/icons/noMsg.png'); ?>"
              alt="modal">
     </a>
 
@@ -72,8 +72,8 @@ if (current_user_can('administrator')) {
                                                 <?php _e('SELECT', 'satl') ?>
                                             </option>
                                             <?php foreach ($users_admin as $user) : ?>
-                                                <option value="<?php echo esc_html_e($user->ID) ?>">
-                                                    <?php echo esc_html_e($user->display_name) ?>
+                                                <option value="<?php  esc_html_e($user->ID) ?>">
+                                                    <?php esc_html_e($user->display_name) ?>
                                                 </option>
                                             <?php endforeach; ?>
                                         </select>
@@ -101,13 +101,13 @@ if (current_user_can('administrator')) {
                 </div>
                 <div class="tab-pane " id="task-list">
                     <h5><?php _e('Your Task List', 'satl'); ?></h5>
-                    <div class="task-items <?php echo empty($data) ? 'empty' : '' ?>"
+                    <div class="task-items <?php esc_attr_e(empty($data) ? 'empty' : '');  ?>"
                          data-empty="<?php _e('You have no task to perform', 'satl'); ?>">
                         <?php
                         foreach ($data as $msg) { ?>
-                            <div class="row-msg msg-item" id="msg-id-<?php echo $msg->id ?>"
-                                 data-msg-detailed="<?php echo htmlspecialchars(json_encode($msg),
-                                     ENT_QUOTES, 'UTF-8') ?>">
+                            <div class="row-msg msg-item" id="msg-id-<?php esc_attr_e($msg->id);  ?>"
+                                 data-msg-detailed="<?php esc_attr_e( htmlspecialchars(json_encode($msg),
+                                     ENT_QUOTES, 'UTF-8')); ?>">
                                 <div class="info-msg">
                                     <div class="avatar-msg">
                                         <?php echo wp_kses(get_avatar($msg->creator_id), array('img' => array('alt' => array(), 'src' => array()))); ?>
@@ -134,8 +134,8 @@ if (current_user_can('administrator')) {
                                     <?php echo SATL_Helper::time_elapsed_string($msg->time_create); ?>
                                     <?php if ((int)$msg->user_id === $current_user_id): ?>
                                         <button class="btn_status btn_submit changeStatus"
-                                                data-user-id="<?php echo $msg->user_id ?>"
-                                                data-msg-id="<?php echo $msg->id ?>"
+                                                data-user-id="<?php esc_attr_e($msg->user_id);  ?>"
+                                                data-msg-id="<?php esc_attr_e( $msg->id ); ?>"
                                                 data-status="done"
                                                 aria-hidden="true">
                                             <?php _e('Done', 'satl'); ?>
